@@ -1,10 +1,10 @@
-DROP SCHEMA IF EXISTS PlayerData;
-CREATE SCHEMA PlayerData;
-USE PlayerData;
+DROP SCHEMA IF EXISTS UzskCore;
+CREATE SCHEMA UzskCore;
+USE UzskCore;
 
-DROP TABLE IF EXISTS PlayerData;
+DROP TABLE IF EXISTS Players;
 
-CREATE TABLE PlayerData (
+CREATE TABLE Players (
     ID INT PRIMARY KEY AUTO_INCREMENT,
     UUID CHAR(36) NOT NULL UNIQUE,
     InitialLoginDateTime DATETIME NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE PlayerData (
     TotalMobKills INT DEFAULT 0  -- 総敵モブキル数
 );
 
-INSERT INTO PlayerData (UUID, InitialLoginDateTime, LastLoginDateTime, PlayTime, ExperiencePoints, Currency, TotalBuildBlocks, TotalDestroyBlocks, TotalMobKills)
+INSERT INTO Players (UUID, InitialLoginDateTime, LastLoginDateTime, PlayTime, ExperiencePoints, Currency, TotalBuildBlocks, TotalDestroyBlocks, TotalMobKills)
 VALUES
 ('550e8400-e29b-41d4-a716-446655440000', '2024-08-25 12:00:00', '2024-08-30 16:45:00', 7200, 1500, 100, 200, 100, 50),
 ('e29b5500-41d4-4a71-8400-446655440001', '2024-08-26 14:30:00', '2024-08-29 10:30:00', 5400, 1200, 150, 250, 150, 75),
