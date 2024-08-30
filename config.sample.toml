@@ -1,3 +1,11 @@
 [servers.test]
     address = "example.com"
     port = 25565
+    description = "A Minecraft Server"
+
+[mysql]
+    host = "127.0.0.1"
+    port = 3306
+    user = "uzsk"
+    password = "uzsk"
+    database = "uzsk"
