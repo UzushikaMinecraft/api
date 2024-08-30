@@ -1,0 +1,3 @@
+[servers.test]
+    address = "example.com"
+    port = 25565
