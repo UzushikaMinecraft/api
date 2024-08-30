@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/2mugi/uzsk-api/api"
 	"github.com/2mugi/uzsk-api/config"
@@ -32,7 +34,11 @@ func main() {
 		log.Fatal("Failed to connect database", err)
 	}
 	db.AutoMigrate(&structs.Player{})
-	dev.CreateTestEntry(db)
+
+	// For development
+	if strings.Contains(os.Args[0], "go-build") {
+		dev.CreateTestEntry(db)
+	}
 
 	// Init web server
 	app := fiber.New()
