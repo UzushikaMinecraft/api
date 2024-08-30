@@ -14,7 +14,8 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 	filter, filter_ok := m["filter"]
 	sort, sort_ok := m["sort"]
 	offset, offset_ok := m["offset"]
-	if !(filter_ok && sort_ok && offset_ok) {
+	limit, limit_ok := m["limit"]
+	if !(filter_ok && sort_ok && offset_ok && limit_ok) {
 		return fiber.Map{
 			"error": "Required parameters not provided",
 		}
@@ -34,11 +35,21 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 		}
 	}
 
+	l, err := strconv.Atoi(limit)
+	if err != nil || l < 0 {
+		return fiber.Map{
+			"error": "Parameter `limit` is not valid",
+		}
+	}
+	if l > 50 {
+		l = 50
+	}
+
 	var players []structs.Player
 	db.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("uuid %v", sort)).
-		Limit(30).
+		Limit(l).
 		Offset(o).
 		Find(&players)
 
