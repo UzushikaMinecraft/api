@@ -1,6 +1,7 @@
 package structs
 
 type Server struct {
-	Address string
-	Port    int
+	Address     string
+	Port        int
+	Description string
 }

@@ -41,6 +41,7 @@ func GetServer(config structs.Config, name string) fiber.Map {
 
 	return fiber.Map{
 		"name":           name,
+		"description":    v.Description,
 		"is_online":      true,
 		"online_players": status.Players,
 		"max_players":    status.Slots,
