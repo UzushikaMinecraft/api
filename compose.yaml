@@ -1,0 +1,10 @@
+services:
+  app:
+    image: ghcr.io/uzushikaminecraft/uzsk-api:main
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - type: bind
+        source: "./config.toml"
+        target: "/etc/uzsk-api/config.toml"
