@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -16,8 +17,13 @@ import (
 )
 
 func main() {
+	// Flag definitions
+	confPath := ""
+	flag.StringVar(&confPath, "config", "./config.toml", "path to config.toml")
+	flag.Parse()
+
 	// Init config
-	Conf := config.Init()
+	Conf := config.Init(confPath)
 
 	// Init db
 	dsn := fmt.Sprintf(
