@@ -9,37 +9,57 @@ import (
 	"gorm.io/gorm"
 )
 
+// Get players with query parameters
+// @Summary Get players
+// @Description Get a list of players with optional filtering and sorting, etc.
+// @Tags players
+// @Accept  json
+// @Produce  json
+// @Param filter query string false "Filter criteria" example(550e8400-e29b-41d4-a716-446655440000) default()
+// @Param sort query string false "Sort order" example(desc) default(asc)
+// @Param offset query int false "Offset for pagination" example(0) default(0)
+// @Param limit query int false "Limit for pagination" example(10) default(50)
+// @Param order_by query string false "Order by field" example(play_time)
+// @Success 200 {array} structs.Player
+// @Router /players [get]
 func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
+	var err error
+
 	// Check if required parameters were provided
-	filter, filter_ok := m["filter"]
+	filter, _ := m["filter"]
 	sort, sort_ok := m["sort"]
 	offset, offset_ok := m["offset"]
 	limit, limit_ok := m["limit"]
-	if !(filter_ok && sort_ok && offset_ok) {
-		return fiber.Map{
-			"error": "Required parameters not provided",
-		}
-	}
-
-	order_by, order_by_ok := m["order_by"]
-	if !(order_by_ok) {
-		order_by = "UUID"
-	}
 
 	// Parse parameters
+	// sort
+	if !(sort_ok) {
+		sort = "asc"
+	}
 	if !(sort == "desc" || sort == "asc") {
 		return fiber.Map{
 			"error": "Parameter `sort` is not correct",
 		}
 	}
 
-	o, err := strconv.Atoi(offset)
-	if err != nil {
-		return fiber.Map{
-			"error": "Parameter `offset` is not valid",
+	// order_by
+	order_by, order_by_ok := m["order_by"]
+	if !(order_by_ok) {
+		order_by = "uuid"
+	}
+
+	// offset
+	var o int
+	if offset_ok {
+		o, err = strconv.Atoi(offset)
+		if err != nil {
+			return fiber.Map{
+				"error": "Parameter `offset` is not valid",
+			}
 		}
 	}
 
+	// limit
 	var l int
 	if limit_ok {
 		l, err := strconv.Atoi(limit)
@@ -65,9 +85,10 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 	db.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("%v %v", order_by, sort)).
-		Limit(l).
 		Offset(o).
+		Limit(l).
 		Find(&players)
+	db.Find(&players)
 
 	return fiber.Map{
 		"players": players,

@@ -1,0 +1,86 @@
+basePath: /api
+definitions:
+  structs.Player:
+    properties:
+      currency:
+        type: integer
+      experiencePoints:
+        type: integer
+      id:
+        type: integer
+      initialLoginDateTime:
+        type: string
+      lastLoginDateTime:
+        type: string
+      playTime:
+        type: integer
+      totalBuildBlocks:
+        type: integer
+      totalDestroyBlocks:
+        type: integer
+      totalMobKills:
+        type: integer
+      uuid:
+        type: string
+    type: object
+host: uzsk-api.iamtakagi.net
+info:
+  contact:
+    email: i@yude.jp
+    name: yude
+  description: Public Web API for uzsk.iamtakagi.net
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
+  termsOfService: https://uzsk.iamtakagi.net
+  title: uzsk-api
+  version: "1.0"
+paths:
+  /players:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of players with optional filtering and sorting, etc.
+      parameters:
+      - default: ""
+        description: Filter criteria
+        example: 550e8400-e29b-41d4-a716-446655440000
+        in: query
+        name: filter
+        type: string
+      - default: asc
+        description: Sort order
+        example: desc
+        in: query
+        name: sort
+        type: string
+      - default: 0
+        description: Offset for pagination
+        example: 0
+        in: query
+        name: offset
+        type: integer
+      - default: 50
+        description: Limit for pagination
+        example: 10
+        in: query
+        name: limit
+        type: integer
+      - description: Order by field
+        example: play_time
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/structs.Player'
+            type: array
+      summary: Get players
+      tags:
+      - players
+swagger: "2.0"
