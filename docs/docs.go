@@ -89,6 +89,41 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/servers/{name}": {
+            "get": {
+                "description": "Get servers registered to uzsk-api",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get servers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of target server",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/structs.Server"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -124,6 +159,20 @@ const docTemplate = `{
                 },
                 "uuid": {
                     "type": "string"
+                }
+            }
+        },
+        "structs.Server": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
                 }
             }
         }

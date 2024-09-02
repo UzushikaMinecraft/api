@@ -9,6 +9,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// Get servers registered to uzsk-api
+// @Summary Get servers
+// @Description Get servers registered to uzsk-api
+// @Tags servers
+// @Accept  json
+// @Produce  json
+// @Param name path string true "Name of target server"
+// @Success 200 {array} structs.Server
+// @Router /servers/{name} [get]
 func GetServer(config structs.Config, name string) fiber.Map {
 	v, ok := config.Servers[name]
 
