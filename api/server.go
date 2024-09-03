@@ -63,13 +63,15 @@ func GetServer(config structs.Config, name string) fiber.Map {
 
 	if err != nil {
 		return fiber.Map{
-			"name":      name,
-			"is_online": false,
+			"server": fiber.Map{
+				"name":      name,
+				"is_online": false,
+			},
 		}
 	}
 
 	return fiber.Map{
-		server: {
+		"server": {
 			"name":           name,
 			"description":    v.Description,
 			"is_online":      true,
