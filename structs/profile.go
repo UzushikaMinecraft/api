@@ -14,3 +14,11 @@ type Profile struct {
 	TotalDestroyBlocks   int       `gorm:"column:total_destroy_blocks;default:0"json:"total_destroy_blocks"`
 	TotalMobKills        int       `gorm:"column:total_mob_kills;default:0"json:"total_mob_kills"`
 }
+
+type Tabler interface {
+    TableName() string
+}
+
+func (Profile) TableName() string {
+	return "profile"
+}
