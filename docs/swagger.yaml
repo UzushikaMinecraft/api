@@ -5,20 +5,20 @@ definitions:
       currency:
         type: integer
       experience:
-        type: float
+        type: number
       id:
         type: integer
       initialLoginDate:
         type: string
       lastLoginDate:
         type: string
-      totalPlayTime:
-        type: integer
       totalBuildBlocks:
         type: integer
       totalDestroyBlocks:
         type: integer
       totalMobKills:
+        type: integer
+      totalPlayTime:
         type: integer
       uuid:
         type: string
@@ -76,7 +76,7 @@ paths:
         name: limit
         type: integer
       - description: Order by field
-        example: total_play_time
+        example: play_time
         in: query
         name: order_by
         type: string

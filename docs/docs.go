@@ -71,7 +71,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "example": "total_play_time",
+                        "example": "play_time",
                         "description": "Order by field",
                         "name": "order_by",
                         "in": "query"
@@ -134,7 +134,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "experience": {
-                    "type": "float"
+                    "type": "number"
                 },
                 "id": {
                     "type": "integer"
@@ -145,9 +145,6 @@ const docTemplate = `{
                 "lastLoginDate": {
                     "type": "string"
                 },
-                "totalPlayTime": {
-                    "type": "integer"
-                },
                 "totalBuildBlocks": {
                     "type": "integer"
                 },
@@ -155,6 +152,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "totalMobKills": {
+                    "type": "integer"
+                },
+                "totalPlayTime": {
                     "type": "integer"
                 },
                 "uuid": {
