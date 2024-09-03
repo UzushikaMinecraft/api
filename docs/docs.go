@@ -71,7 +71,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "example": "play_time",
+                        "example": "total_play_time",
                         "description": "Order by field",
                         "name": "order_by",
                         "in": "query"
@@ -133,19 +133,19 @@ const docTemplate = `{
                 "currency": {
                     "type": "integer"
                 },
-                "experiencePoints": {
-                    "type": "integer"
+                "experience": {
+                    "type": "float"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "initialLoginDateTime": {
+                "initialLoginDate": {
                     "type": "string"
                 },
-                "lastLoginDateTime": {
+                "lastLoginDate": {
                     "type": "string"
                 },
-                "playTime": {
+                "totalPlayTime": {
                     "type": "integer"
                 },
                 "totalBuildBlocks": {

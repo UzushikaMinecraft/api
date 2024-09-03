@@ -65,7 +65,7 @@
                     },
                     {
                         "type": "string",
-                        "example": "play_time",
+                        "example": "total_play_time",
                         "description": "Order by field",
                         "name": "order_by",
                         "in": "query"
@@ -127,19 +127,19 @@
                 "currency": {
                     "type": "integer"
                 },
-                "experiencePoints": {
+                "experience": {
                     "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "initialLoginDateTime": {
+                "initialLoginDate": {
                     "type": "string"
                 },
-                "lastLoginDateTime": {
+                "lastLoginDate": {
                     "type": "string"
                 },
-                "playTime": {
+                "totalPlayTime": {
                     "type": "integer"
                 },
                 "totalBuildBlocks": {

@@ -4,15 +4,15 @@ definitions:
     properties:
       currency:
         type: integer
-      experiencePoints:
+      experience:
         type: integer
       id:
         type: integer
-      initialLoginDateTime:
+      initialLoginDate:
         type: string
-      lastLoginDateTime:
+      lastLoginDate:
         type: string
-      playTime:
+      totalPlayTime:
         type: integer
       totalBuildBlocks:
         type: integer
@@ -76,7 +76,7 @@ paths:
         name: limit
         type: integer
       - description: Order by field
-        example: play_time
+        example: total_play_time
         in: query
         name: order_by
         type: string
