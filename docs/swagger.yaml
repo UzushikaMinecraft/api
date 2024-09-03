@@ -5,7 +5,7 @@ definitions:
       currency:
         type: integer
       experience:
-        type: integer
+        type: float
       id:
         type: integer
       initialLoginDate:
