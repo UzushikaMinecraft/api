@@ -1,24 +1,23 @@
-DROP SCHEMA IF EXISTS UzskCore;
-CREATE SCHEMA UzskCore;
-USE UzskCore;
+DROP SCHEMA IF EXISTS uzsk;
+CREATE SCHEMA uzsk;
+USE uzsk;
 
-DROP TABLE IF EXISTS Players;
+DROP TABLE IF EXISTS profile;
 
-CREATE TABLE Players (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
-    UUID CHAR(36) NOT NULL UNIQUE,
-    InitialLoginDateTime DATETIME NOT NULL,
-    LastLoginDateTime DATETIME,
-    PlayTime INT DEFAULT 0,
-    ExperiencePoints INT DEFAULT 0,  -- 経験値
-    Currency INT DEFAULT 0,  -- 通貨
-    TotalBuildBlocks INT DEFAULT 0,  -- 総建築ブロック数
-    TotalDestroyBlocks INT DEFAULT 0,  -- 総破壊ブロック数
-    TotalMobKills INT DEFAULT 0  -- 総敵モブキル数
+CREATE TABLE `profile` (
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `uuid` CHAR(36) NOT NULL UNIQUE,
+    `initial_login_date` TIMESTAMP NOT NULL,
+    `last_login_date` TIMESTAMP NOT NULL,
+    `total_play_time` BIGINT NOT NULL,
+    `experience` FLOAT DEFAULT 0.0, 
+    `currency` INT DEFAULT 0, 
+    `total_build_blocks` INT DEFAULT 0,
+    `total_destroy_blocks` INT DEFAULT 0, 
+    `total_mob_kills` INT DEFAULT 0
 );
 
-INSERT INTO Players (UUID, InitialLoginDateTime, LastLoginDateTime, PlayTime, ExperiencePoints, Currency, TotalBuildBlocks, TotalDestroyBlocks, TotalMobKills)
-VALUES
+INSERT INTO `profile` (`uuid`, `initial_login_date`, `last_login_date`, `total_play_time`, `experience`, `currency`, `total_build_blocks`, `total_destroy_blocks`, `total_mob_kills`) VALUES 
 ('550e8400-e29b-41d4-a716-446655440000', '2024-08-25 12:00:00', '2024-08-30 16:45:00', 7200, 1500, 100, 200, 100, 50),
 ('e29b5500-41d4-4a71-8400-446655440001', '2024-08-26 14:30:00', '2024-08-29 10:30:00', 5400, 1200, 150, 250, 150, 75),
 ('d441b400-7164-550e-29b8-446655440002', '2024-08-27 09:15:00', '2024-08-28 18:20:00', 3600, 800, 200, 150, 75, 25),
