@@ -75,7 +75,7 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 		l = 50
 	}
 
-	if !(order_by == "uuid" || order_by == "experience_points" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "play_time") {
+	if !(order_by == "uuid" || order_by == "experience" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "total_play_time") {
 		return fiber.Map{
 			"error": "Parameter `order_by` is not valid",
 		}
