@@ -13,6 +13,7 @@ import (
 	_ "github.com/2mugi/uzsk-api/docs"
 	"github.com/2mugi/uzsk-api/structs"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -89,6 +90,13 @@ func main() {
 
 	// Swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
+
+	app.Use(cors.New())
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "https://uzsk.iamtakagi.net, http://localhost:8080",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	log.Fatal(app.Listen(":3000"))
 }
