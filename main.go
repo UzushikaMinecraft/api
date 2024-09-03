@@ -94,8 +94,9 @@ func main() {
 	app.Use(cors.New())
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://uzsk.iamtakagi.net, http://localhost:8080",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
 
 	log.Fatal(app.Listen(":3000"))
