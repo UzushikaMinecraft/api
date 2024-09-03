@@ -91,7 +91,7 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 	db.Find(&players)
 
 	return fiber.Map{ 
-		"players": players
+		"players": players,
 	}
 }
 
