@@ -63,22 +63,22 @@ func GetServer(config structs.Config, name string) fiber.Map {
 
 	if err != nil {
 		return fiber.Map{
-			"server": fiber.Map{
-				"name":      name,
-				"is_online": false,
+			"server": &structs.ServerStatus{
+				Name:      name,
+				IsOnline: false,
 			},
 		}
 	}
 
 	return fiber.Map{
-		"server": {
-			"name":           name,
-			"description":    v.Description,
-			"is_online":      true,
-			"online_players": status.Players,
-			"max_players":    status.Slots,
-			"version":        status.GameVersion,
-			"players_sample": status.PlayersSample,
+		"server": &structs.ServerStatus{
+			Name:           name,
+			Description:    v.Description,
+			IsOnline:       true,
+			OnlinePlayers:  status.Players,
+			MaxPlayers:     status.Slots,
+			Version:        status.GameVersion,
+			PlayersSample:  status.PlayersSample,
 		},
 	}
 }
