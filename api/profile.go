@@ -9,10 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// Get players with query parameters
-// @Summary Get players
-// @Description Get a list of players with optional filtering and sorting, etc.
-// @Tags players
+// Get profiles with query parameters
+// @Summary Get profiles
+// @Description Get a list of profiles with optional filtering and sorting, etc.
+// @Tags profiles
 // @Accept  json
 // @Produce  json
 // @Param filter query string false "Filter criteria" example(550e8400-e29b-41d4-a716-446655440000) default()
@@ -20,9 +20,9 @@ import (
 // @Param offset query int false "Offset for pagination" example(0) default(0)
 // @Param limit query int false "Limit for pagination" example(10) default(50)
 // @Param order_by query string false "Order by field" example(play_time)
-// @Success 200 {array} structs.Player
-// @Router /players [get]
-func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
+// @Success 200 {array} structs.profile
+// @Router /profiles [get]
+func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 	var err error
 
 	// Check if required parameters were provided
@@ -81,40 +81,40 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 		}
 	}
 
-	var players []structs.Player
+	var profiles []structs.Profile
 	db.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("%v %v", order_by, sort)).
 		Offset(o).
 		Limit(l).
-		Find(&players)
-	db.Find(&players)
+		Find(&profiles)
+	db.Find(&profiles)
 
 	return fiber.Map{ 
-		"players": players,
+		"profiles": profiles,
 	}
 }
 
-// Get player by UUID
-// @Summary Get player
-// @Description Get a player by UUID
-// @Tags players
+// Get profile by UUID
+// @Summary Get profile
+// @Description Get a profile by UUID
+// @Tags profiles
 // @Accept  json
 // @Produce  json
-// @Param uuid path string true "UUID of target player"
-// @Success 200 {object} structs.Player
-// @Router /players/{uuid} [get]
-func GetPlayer(db *gorm.DB, uuid string) fiber.Map {
-	var player structs.Player
-	db.Where("uuid = ?", uuid).First(&player)
+// @Param uuid path string true "UUID of target profile"
+// @Success 200 {object} structs.profile
+// @Router /profiles/{uuid} [get]
+func GetProfile(db *gorm.DB, uuid string) fiber.Map {
+	var profile structs.Profile
+	db.Where("uuid = ?", uuid).First(&profile)
 
-	if player.UUID == "" {
+	if profile.UUID == "" {
 		return fiber.Map{
-			"error": "No such player",
+			"error": "No such profile",
 		}
 	}
 
 	return fiber.Map{
-		"player": player,
+		"profile": profile,
 	}
 }

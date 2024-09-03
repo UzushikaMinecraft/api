@@ -8,7 +8,7 @@ import (
 )
 
 func CreateTestEntry(db *gorm.DB) {
-	players := []structs.Player{
+	profiles := []structs.Profile{
 		{
 			UUID:                    "550e8400-e29b-41d4-a716-446655440000",
 			InitialLoginDate:        time.Date(2024, 8, 25, 12, 0, 0, 0, time.UTC),
@@ -66,5 +66,5 @@ func CreateTestEntry(db *gorm.DB) {
 		},
 	}
 
-	db.Create(&players)
+	db.Create(&profiles)
 }

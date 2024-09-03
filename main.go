@@ -51,7 +51,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect database", err)
 	}
-	db.AutoMigrate(&structs.Player{})
+	db.AutoMigrate(&structs.Profile{})
 
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
@@ -76,15 +76,15 @@ func main() {
 	})
 
 	// Player
-	// - /api/players
-	app.Get("/api/players", func(c *fiber.Ctx) error {
+	// - /api/profiles
+	app.Get("/api/profiles", func(c *fiber.Ctx) error {
 		m := c.Queries()
-		return c.JSON(api.GetPlayers(db, m))
+		return c.JSON(api.GetProfiles(db, m))
 	})
 
-	// - /api/players/:uuid
-	app.Get("/api/players/:uuid", func(c *fiber.Ctx) error {
-		return c.JSON(api.GetPlayer(db, c.Params("uuid")))
+	// - /api/profiles/:uuid
+	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
+		return c.JSON(api.GetProfile(db, c.Params("uuid")))
 	})
 
 	// Swagger

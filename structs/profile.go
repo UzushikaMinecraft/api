@@ -2,7 +2,7 @@ package structs
 
 import "time"
 
-type Player struct {
+type Profile struct {
 	ID                   int       `gorm:"column:id;primaryKey;autoIncrement"json:"id"`
 	UUID                 string    `gorm:"column:uuid;type:char(36);unique;not null"json:"uuid"`
 	InitialLoginDate     time.Time `gorm:"column:initial_login_date;not null"json:"initial_login_date"`
