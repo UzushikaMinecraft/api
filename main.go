@@ -91,8 +91,6 @@ func main() {
 	// Swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	app.Use(cors.New())
-
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin",
