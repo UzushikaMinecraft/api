@@ -64,6 +64,11 @@ func main() {
 		return c.SendString("200 OK")
 	})
 
+	// - /api/servers
+	app.Get("/api/servers", func(c *fiber.Ctx) error {
+		return c.JSON(api.GetServers(Conf))
+	})
+
 	// API routes
 	// - /api/server
 	app.Get("/api/servers/:name", func(c *fiber.Ctx) error {
@@ -75,6 +80,11 @@ func main() {
 	app.Get("/api/players", func(c *fiber.Ctx) error {
 		m := c.Queries()
 		return c.JSON(api.GetPlayers(db, m))
+	})
+
+	// - /api/players/:uuid
+	app.Get("/api/players/:uuid", func(c *fiber.Ctx) error {
+		return c.JSON(api.GetPlayer(db, c.Params("uuid")))
 	})
 
 	// Swagger

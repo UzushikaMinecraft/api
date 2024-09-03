@@ -90,5 +90,31 @@ func GetPlayers(db *gorm.DB, m map[string]string) fiber.Map {
 		Find(&players)
 	db.Find(&players)
 
-	return fiber.Map{ players }
+	return fiber.Map{ 
+		"players": players
+	}
+}
+
+// Get player by UUID
+// @Summary Get player
+// @Description Get a player by UUID
+// @Tags players
+// @Accept  json
+// @Produce  json
+// @Param uuid path string true "UUID of target player"
+// @Success 200 {object} structs.Player
+// @Router /players/{uuid} [get]
+func GetPlayer(db *gorm.DB, uuid string) fiber.Map {
+	var player structs.Player
+	db.Where("uuid = ?", uuid).First(&player)
+
+	if player.UUID == "" {
+		return fiber.Map{
+			"error": "No such player",
+		}
+	}
+
+	return fiber.Map{
+		"player": player,
+	}
 }

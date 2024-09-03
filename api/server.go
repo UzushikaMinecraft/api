@@ -15,6 +15,26 @@ import (
 // @Tags servers
 // @Accept  json
 // @Produce  json
+// @Success 200 {array} structs.Server
+// @Router /servers [get]
+func GetServers(config structs.Config) fiber.Map {
+	var servers []fiber.Map
+
+	for k := range config.Servers {
+		servers = append(servers, GetServer(config, k))
+	}
+
+	return fiber.Map{
+		"servers": servers,
+	}
+}
+
+// Get servers registered to uzsk-api
+// @Summary Get servers
+// @Description Get servers registered to uzsk-api
+// @Tags servers
+// @Accept  json
+// @Produce  json
 // @Param name path string true "Name of target server"
 // @Success 200 {array} structs.Server
 // @Router /servers/{name} [get]
@@ -49,12 +69,14 @@ func GetServer(config structs.Config, name string) fiber.Map {
 	}
 
 	return fiber.Map{
-		"name":           name,
-		"description":    v.Description,
-		"is_online":      true,
-		"online_players": status.Players,
-		"max_players":    status.Slots,
-		"version":        status.GameVersion,
-		"players_sample": status.PlayersSample,
+		server: {
+			"name":           name,
+			"description":    v.Description,
+			"is_online":      true,
+			"online_players": status.Players,
+			"max_players":    status.Slots,
+			"version":        status.GameVersion,
+			"players_sample": status.PlayersSample,
+		},
 	}
 }
