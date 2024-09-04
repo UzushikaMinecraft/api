@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/2mugi/uzsk-api/structs"
-	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +21,7 @@ import (
 // @Param order_by query string false "Order by field" example(play_time)
 // @Success 200 {array} structs.profile
 // @Router /profiles [get]
-func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
+func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 	var err error
 
 	// Check if required parameters were provided
@@ -37,9 +36,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 		sort = "asc"
 	}
 	if !(sort == "desc" || sort == "asc") {
-		return fiber.Map{
-			"error": "Parameter `sort` is not correct",
-		}
+		return nil
 	}
 
 	// order_by
@@ -53,9 +50,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 	if offset_ok {
 		o, err = strconv.Atoi(offset)
 		if err != nil {
-			return fiber.Map{
-				"error": "Parameter `offset` is not valid",
-			}
+			return nil
 		}
 	}
 
@@ -64,9 +59,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 	if limit_ok {
 		l, err := strconv.Atoi(limit)
 		if err != nil || l < 0 {
-			return fiber.Map{
-				"error": "Parameter `limit` is not valid",
-			}
+			return nil
 		}
 		if l > 50 {
 			l = 50
@@ -76,12 +69,10 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 	}
 
 	if !(order_by == "uuid" || order_by == "experience" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "total_play_time") {
-		return fiber.Map{
-			"error": "Parameter `order_by` is not valid",
-		}
+		return nil
 	}
 
-	var profiles []structs.Profile
+	var profiles *[]structs.Profile
 	db.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("%v %v", order_by, sort)).
@@ -90,9 +81,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 		Find(&profiles)
 	db.Find(&profiles)
 
-	return fiber.Map{ 
-		"profiles": profiles,
-	}
+	return profiles
 }
 
 // Get profile by UUID
@@ -104,17 +93,13 @@ func GetProfiles(db *gorm.DB, m map[string]string) fiber.Map {
 // @Param uuid path string true "UUID of target profile"
 // @Success 200 {object} structs.profile
 // @Router /profiles/{uuid} [get]
-func GetProfile(db *gorm.DB, uuid string) fiber.Map {
-	var profile structs.Profile
+func GetProfile(db *gorm.DB, uuid string) (*structs.Profile) {
+	var profile *structs.Profile
 	db.Where("uuid = ?", uuid).First(&profile)
 
 	if profile.UUID == "" {
-		return fiber.Map{
-			"error": "No such profile",
-		}
+		return nil
 	}
 
-	return fiber.Map{
-		"profile": profile,
-	}
+	return profile
 }
