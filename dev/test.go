@@ -3,7 +3,7 @@ package dev
 import (
 	"time"
 
-	"github.com/2mugi/uzsk-api/structs"
+	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"gorm.io/gorm"
 )
 

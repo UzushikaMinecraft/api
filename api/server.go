@@ -2,7 +2,7 @@ package api
 
 import (
 
-	"github.com/2mugi/uzsk-api/structs"
+	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"github.com/Craftserve/mcstatus"
 )
 

@@ -3,7 +3,7 @@ package config
 import (
 	"log"
 
-	"github.com/2mugi/uzsk-api/structs"
+	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"github.com/BurntSushi/toml"
 )
 

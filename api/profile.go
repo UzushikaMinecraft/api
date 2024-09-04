@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/2mugi/uzsk-api/structs"
+	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"gorm.io/gorm"
 )
+
 
 // Get profiles with query parameters
 // @Summary Get profiles

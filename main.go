@@ -7,11 +7,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/2mugi/uzsk-api/api"
-	"github.com/2mugi/uzsk-api/config"
-	"github.com/2mugi/uzsk-api/dev"
-	_ "github.com/2mugi/uzsk-api/docs"
-	"github.com/2mugi/uzsk-api/structs"
+	"github.com/uzushikaminecraft/uzsk-api/api"
+	"github.com/uzushikaminecraft/uzsk-api/external_api"
+	"github.com/uzushikaminecraft/uzsk-api/config"
+	"github.com/uzushikaminecraft/uzsk-api/dev"
+	_ "github.com/uzushikaminecraft/uzsk-api/docs"
+	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
@@ -86,6 +87,26 @@ func main() {
 	// - /api/profiles/:uuid
 	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
 		return c.JSON(api.GetProfile(db, c.Params("uuid")))
+	})
+
+	mojangApi := &external_api.MojangApi{}
+
+	// - /api/external/mojang/:uuid/name
+	app.Get("/api/external/mojang/:uuid/name", func(c *fiber.Ctx) error {
+		name, err := mojangApi.GetNameByUUID(c.Params("uuid"))
+		if err != nil {
+			return err
+		}
+		return c.JSON(name)
+	})
+	
+	// - /api/external/mojang/:name/uuid
+	app.Get("/api/external/mojang/:name/uuid", func(c *fiber.Ctx) error {
+		uuid, err := mojangApi.GetUUIDByName(c.Params("name"))
+		if err != nil {
+			return err
+		}
+		return c.JSON(uuid)
 	})
 
 	// Swagger
