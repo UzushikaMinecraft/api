@@ -3,7 +3,7 @@ package external_api
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -37,7 +37,7 @@ func (api *MojangApi) GetNameByUUID(uuid string) (string, error) {
 	}
 
 	var profileResponse ProfileResnponse
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("error reading response body: %v", err)
 	}
@@ -62,7 +62,7 @@ func (api *MojangApi) GetUUIDByName(name string) (string, error) {
 	}
 
 	var uuidResponse UUIDResponse
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("error reading response body: %v", err)
 	}
