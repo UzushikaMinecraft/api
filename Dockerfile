@@ -7,10 +7,10 @@ RUN go build .
 FROM debian:latest AS runner
 WORKDIR /bin
 
-COPY --from=builder /work/uzsk-api /bin/uzsk-api
+COPY --from=builder /work/api /bin/uzsk-api
 RUN apt-get update && apt-get install -y \
     ca-certificates \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/bin/uzsk-api", "--config", "/etc/uzsk-api/config.toml"]
+ENTRYPOINT ["/bin/api", "--config", "/etc/api/config.toml"]

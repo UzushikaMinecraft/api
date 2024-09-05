@@ -1,4 +1,4 @@
-package api
+package services
 
 import (
 	"fmt"
@@ -85,7 +85,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 	for i, profile := range *profiles {
 		var bedrock *structs.Bedrock
 		db.Where("fuid = ?", profile.UUID).First(&bedrock)
-		if bedrock != nil {
+		if bedrock != nil && bedrock.XUID != "" {
 			geyserApi := &external_api.GeyserApi{}
 			(*profiles)[i].IsBedrock = true
 			(*profiles)[i].XUID = bedrock.XUID

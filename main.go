@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
-	"github.com/uzushikaminecraft/api/api"
+	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/dev"
 	_ "github.com/uzushikaminecraft/api/docs"
@@ -67,25 +67,25 @@ func main() {
 
 	// - /api/servers
 	app.Get("/api/servers", func(c *fiber.Ctx) error {
-		return c.JSON(api.GetServers(Conf))
+		return c.JSON(services.GetServers(Conf))
 	})
 
 	// API routes
 	// - /api/server
 	app.Get("/api/servers/:name", func(c *fiber.Ctx) error {
-		return c.JSON(api.GetServer(Conf, c.Params("name")))
+		return c.JSON(services.GetServer(Conf, c.Params("name")))
 	})
 
 	// Player
 	// - /api/profiles
 	app.Get("/api/profiles", func(c *fiber.Ctx) error {
 		m := c.Queries()
-		return c.JSON(api.GetProfiles(db, m))
+		return c.JSON(services.GetProfiles(db, m))
 	})
 
 	// - /api/profiles/:uuid
 	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
-		return c.JSON(api.GetProfile(db, c.Params("uuid")))
+		return c.JSON(services.GetProfile(db, c.Params("uuid")))
 	})
 
 	// Swagger
