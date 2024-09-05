@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/uzushikaminecraft/uzsk-api/external_api"
 	"github.com/uzushikaminecraft/uzsk-api/structs"
+
 	"gorm.io/gorm"
 )
-
 
 // Get profiles with query parameters
 // @Summary Get profiles
@@ -20,9 +21,9 @@ import (
 // @Param offset query int false "Offset for pagination" example(0) default(0)
 // @Param limit query int false "Limit for pagination" example(10) default(50)
 // @Param order_by query string false "Order by field" example(play_time)
-// @Success 200 {array} structs.profile
+// @Success 200 {array} structs.Profile
 // @Router /profiles [get]
-func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
+func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 	var err error
 
 	// Check if required parameters were provided
@@ -80,11 +81,11 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 		Offset(o).
 		Limit(l).
 		Find(&profiles)
-	
+
 	for i, profile := range *profiles {
 		var bedrock *structs.Bedrock
 		db.Where("fuid = ?", profile.UUID).First(&bedrock)
-		if (bedrock != nil) {
+		if bedrock != nil {
 			geyserApi := &external_api.GeyserApi{}
 			(*profiles)[i].IsBedrock = true
 			(*profiles)[i].XUID = bedrock.XUID
@@ -92,8 +93,12 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 		} else {
 			mojangApi := &external_api.MojangApi{}
 			(*profiles)[i].IsBedrock = false
-			(*profiles)[i].XUID = nil
-			(*profiles)[i].Name = mojangApi.GetNameByUUID(profile.UUID)
+			(*profiles)[i].XUID = ""
+			(*profiles)[i].Name, err = mojangApi.GetNameByUUID(profile.UUID)
+
+			if err != nil {
+				return nil
+			}
 		}
 	}
 
@@ -109,7 +114,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 // @Param uuid path string true "UUID of target profile"
 // @Success 200 {object} structs.profile
 // @Router /profiles/{uuid} [get]
-func GetProfile(db *gorm.DB, uuid string) (*structs.Profile) {
+func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 	var profile *structs.Profile
 	db.Where("uuid = ?", uuid).First(&profile)
 
