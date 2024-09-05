@@ -89,7 +89,7 @@ func main() {
 	})
 
 	// Swagger
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/api/swagger/*", swagger.HandlerDefault)
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
