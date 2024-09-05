@@ -14,7 +14,6 @@ import (
 	"github.com/uzushikaminecraft/uzsk-api/config"
 	"github.com/uzushikaminecraft/uzsk-api/dev"
 	_ "github.com/uzushikaminecraft/uzsk-api/docs"
-	"github.com/uzushikaminecraft/uzsk-api/external_api"
 	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
