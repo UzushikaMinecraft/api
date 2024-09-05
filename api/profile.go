@@ -116,7 +116,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 // @Accept  json
 // @Produce  json
 // @Param uuid path string true "UUID of target profile"
-// @Success 200 {object} structs.profile
+// @Success 200 {object} structs.Profile
 // @Router /profiles/{uuid} [get]
 func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 	var profile *structs.Profile
