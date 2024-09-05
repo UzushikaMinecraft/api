@@ -69,7 +69,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 		l = 50
 	}
 
-	if !(order_by == "uuid" || order_by == "experience" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "total_play_time") {
+	if !(order_by == "id" || order_by == "uuid" || order_by == "experience" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "total_play_time") {
 		return nil
 	}
 
@@ -80,7 +80,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 		Offset(o).
 		Limit(l).
 		Find(&profiles)
-	db.Find(&profiles)
+	
 
 	return profiles
 }
