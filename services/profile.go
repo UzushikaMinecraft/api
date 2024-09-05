@@ -119,11 +119,35 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 // @Success 200 {object} structs.Profile
 // @Router /profiles/{uuid} [get]
 func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
+	var err error
+	
 	var profile *structs.Profile
 	db.Where("uuid = ?", uuid).First(&profile)
 
 	if profile.UUID == "" {
 		return nil
+	}
+
+	var bedrock *structs.Bedrock
+	db.Where("fuid = ?", profile.UUID).First(&bedrock)
+	if bedrock != nil && bedrock.XUID != "" {
+		geyserApi := &external_api.GeyserApi{}
+		profile.IsBedrock = true
+		profile.XUID = bedrock.XUID
+		profile.Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
+
+		if err != nil {
+			return nil
+		}
+	} else {
+		mojangApi := &external_api.MojangApi{}
+		profile.IsBedrock = false
+		profile.XUID = ""
+		profile.Name, err = mojangApi.GetNameByUUID(profile.UUID)
+
+		if err != nil {
+			return nil
+		}
 	}
 
 	return profile
