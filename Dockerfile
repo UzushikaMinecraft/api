@@ -7,7 +7,7 @@ RUN go build .
 FROM debian:latest AS runner
 WORKDIR /bin
 
-COPY --from=builder /work/api /bin/uzsk-api
+COPY --from=builder /work/api /bin/api
 RUN apt-get update && apt-get install -y \
     ca-certificates \
  && apt-get clean \
