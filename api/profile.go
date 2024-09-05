@@ -81,6 +81,21 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile) {
 		Limit(l).
 		Find(&profiles)
 	
+	for i, profile := range *profiles {
+		var bedrock *structs.Bedrock
+		db.Where("fuid = ?", profile.UUID).First(&bedrock)
+		if (bedrock != nil) {
+			geyserApi := &external_api.GeyserApi{}
+			(*profiles)[i].IsBedrock = true
+			(*profiles)[i].XUID = bedrock.XUID
+			(*profiles)[i].Name = geyserApi.GetNameByXUID(bedrock.XUID)
+		} else {
+			mojangApi := &external_api.MojangApi{}
+			(*profiles)[i].IsBedrock = false
+			(*profiles)[i].XUID = nil
+			(*profiles)[i].Name = mojangApi.GetNameByUUID(profile.UUID)
+		}
+	}
 
 	return profiles
 }

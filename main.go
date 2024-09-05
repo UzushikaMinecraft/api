@@ -89,26 +89,6 @@ func main() {
 		return c.JSON(api.GetProfile(db, c.Params("uuid")))
 	})
 
-	mojangApi := &external_api.MojangApi{}
-
-	// - /api/external/mojang/:uuid/name
-	app.Get("/api/external/mojang/:uuid/name", func(c *fiber.Ctx) error {
-		name, err := mojangApi.GetNameByUUID(c.Params("uuid"))
-		if err != nil {
-			return err
-		}
-		return c.JSON(name)
-	})
-	
-	// - /api/external/mojang/:name/uuid
-	app.Get("/api/external/mojang/:name/uuid", func(c *fiber.Ctx) error {
-		uuid, err := mojangApi.GetUUIDByName(c.Params("name"))
-		if err != nil {
-			return err
-		}
-		return c.JSON(uuid)
-	})
-
 	// Swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
