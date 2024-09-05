@@ -89,7 +89,11 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 			geyserApi := &external_api.GeyserApi{}
 			(*profiles)[i].IsBedrock = true
 			(*profiles)[i].XUID = bedrock.XUID
-			(*profiles)[i].Name = geyserApi.GetNameByXUID(bedrock.XUID)
+			(*profiles)[i].Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
+
+			if err != nil {
+				return nil
+			}
 		} else {
 			mojangApi := &external_api.MojangApi{}
 			(*profiles)[i].IsBedrock = false
