@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 
-	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"github.com/BurntSushi/toml"
+	"github.com/uzushikaminecraft/api/structs"
 )
 
 func Init(path string) structs.Config {

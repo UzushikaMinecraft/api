@@ -1,4 +1,4 @@
-module github.com/uzushikaminecraft/uzsk-api
+module github.com/uzushikaminecraft/api
 
 go 1.21.12
 

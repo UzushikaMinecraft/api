@@ -1,9 +1,8 @@
 package api
 
 import (
-
-	"github.com/uzushikaminecraft/uzsk-api/structs"
 	"github.com/Craftserve/mcstatus"
+	"github.com/uzushikaminecraft/api/structs"
 )
 
 // Get servers registered to uzsk-api
@@ -32,12 +31,12 @@ func GetServers(config structs.Config) []structs.ServerStatus {
 // @Param name path string true "Name of target server"
 // @Success 200 {array} structs.Server
 // @Router /servers/{name} [get]
-func GetServer(config structs.Config, name string) (*structs.ServerStatus) {
+func GetServer(config structs.Config, name string) *structs.ServerStatus {
 	v, ok := config.Servers[name]
 
 	if !ok {
 		return &structs.ServerStatus{
-			Name:      name,
+			Name:     name,
 			IsOnline: false,
 		}
 	}
@@ -46,7 +45,7 @@ func GetServer(config structs.Config, name string) (*structs.ServerStatus) {
 	addr, err := mcstatus.Resolve(v.Address)
 	if err != nil {
 		return &structs.ServerStatus{
-			Name:      name,
+			Name:     name,
 			IsOnline: false,
 		}
 	}
@@ -58,19 +57,18 @@ func GetServer(config structs.Config, name string) (*structs.ServerStatus) {
 
 	if err != nil {
 		return &structs.ServerStatus{
-			Name:      name,
+			Name:     name,
 			IsOnline: false,
 		}
 	}
 
 	return &structs.ServerStatus{
-		Name:           name,
-		Description:    &v.Description,
-		IsOnline:       true,
-		OnlinePlayers:  &status.Players,
-		MaxPlayers:     &status.Slots,
-		Version:        &status.GameVersion,
-		PlayersSample:  &status.PlayersSample,
+		Name:          name,
+		Description:   &v.Description,
+		IsOnline:      true,
+		OnlinePlayers: &status.Players,
+		MaxPlayers:    &status.Slots,
+		Version:       &status.GameVersion,
+		PlayersSample: &status.PlayersSample,
 	}
 }
-

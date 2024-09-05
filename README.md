@@ -1,4 +1,4 @@
-# uzsk-api
+# api
 Public Web API for uzsk.iamtakagi.net
 
 ## Development

@@ -23,9 +23,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/players": {
+        "/profiles": {
             "get": {
-                "description": "Get a list of players with optional filtering and sorting, etc.",
+                "description": "Get a list of profiles with optional filtering and sorting, etc.",
                 "consumes": [
                     "application/json"
                 ],
@@ -33,9 +33,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "players"
+                    "profiles"
                 ],
-                "summary": "Get players",
+                "summary": "Get profiles",
                 "parameters": [
                     {
                         "type": "string",
@@ -83,7 +83,65 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/structs.Player"
+                                "$ref": "#/definitions/structs.Profile"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/profiles/{uuid}": {
+            "get": {
+                "description": "Get a profile by UUID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profiles"
+                ],
+                "summary": "Get profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UUID of target profile",
+                        "name": "uuid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Profile"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers": {
+            "get": {
+                "description": "Get servers registered to uzsk-api",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get servers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/structs.Server"
                             }
                         }
                     }
@@ -127,7 +185,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "structs.Player": {
+        "structs.Profile": {
             "type": "object",
             "properties": {
                 "currency": {
@@ -139,25 +197,34 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "initialLoginDate": {
+                "initial_login_date": {
                     "type": "string"
                 },
-                "lastLoginDate": {
+                "is_bedrock": {
+                    "type": "boolean"
+                },
+                "last_login_date": {
                     "type": "string"
                 },
-                "totalBuildBlocks": {
+                "name": {
+                    "type": "string"
+                },
+                "total_build_blocks": {
                     "type": "integer"
                 },
-                "totalDestroyBlocks": {
+                "total_destroy_blocks": {
                     "type": "integer"
                 },
-                "totalMobKills": {
+                "total_mob_kills": {
                     "type": "integer"
                 },
-                "totalPlayTime": {
+                "total_play_time": {
                     "type": "integer"
                 },
                 "uuid": {
+                    "type": "string"
+                },
+                "xuid": {
                     "type": "string"
                 }
             }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/uzushikaminecraft/uzsk-api/external_api"
-	"github.com/uzushikaminecraft/uzsk-api/structs"
+	"github.com/uzushikaminecraft/api/external_api"
+	"github.com/uzushikaminecraft/api/structs"
 
 	"gorm.io/gorm"
 )
