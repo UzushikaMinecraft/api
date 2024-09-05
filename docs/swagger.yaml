@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  structs.Player:
+  structs.Profile:
     properties:
       currency:
         type: integer
@@ -8,19 +8,25 @@ definitions:
         type: number
       id:
         type: integer
-      initialLoginDate:
+      initial_login_date:
         type: string
-      lastLoginDate:
+      is_bedrock:
+        type: boolean
+      last_login_date:
         type: string
-      totalBuildBlocks:
+      name:
+        type: string
+      total_build_blocks:
         type: integer
-      totalDestroyBlocks:
+      total_destroy_blocks:
         type: integer
-      totalMobKills:
+      total_mob_kills:
         type: integer
-      totalPlayTime:
+      total_play_time:
         type: integer
       uuid:
+        type: string
+      xuid:
         type: string
     type: object
   structs.Server:
@@ -45,11 +51,11 @@ info:
   title: uzsk-api
   version: "1.0"
 paths:
-  /players:
+  /profiles:
     get:
       consumes:
       - application/json
-      description: Get a list of players with optional filtering and sorting, etc.
+      description: Get a list of profiles with optional filtering and sorting, etc.
       parameters:
       - default: ""
         description: Filter criteria
@@ -87,11 +93,49 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/structs.Player'
+              $ref: '#/definitions/structs.Profile'
             type: array
-      summary: Get players
+      summary: Get profiles
       tags:
-      - players
+      - profiles
+  /profiles/{uuid}:
+    get:
+      consumes:
+      - application/json
+      description: Get a profile by UUID
+      parameters:
+      - description: UUID of target profile
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.Profile'
+      summary: Get profile
+      tags:
+      - profiles
+  /servers:
+    get:
+      consumes:
+      - application/json
+      description: Get servers registered to uzsk-api
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/structs.Server'
+            type: array
+      summary: Get servers
+      tags:
+      - servers
   /servers/{name}:
     get:
       consumes:
