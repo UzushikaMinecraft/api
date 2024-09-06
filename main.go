@@ -97,6 +97,7 @@ func main() {
 			return c.SendStatus(500)
 		}
 
+		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
 		return c.SendStream(img)
 	})
 
@@ -109,6 +110,7 @@ func main() {
 			return c.SendStatus(500)
 		}
 
+		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
 		return c.SendStream(img)
 	})
 
@@ -121,6 +123,7 @@ func main() {
 			return c.SendStatus(500)
 		}
 
+		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
 		return c.SendStream(img)
 	})
 
