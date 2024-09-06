@@ -90,9 +90,9 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 			(*profiles)[i].IsBedrock = true
 			(*profiles)[i].XUID = bedrock.XUID
 			(*profiles)[i].Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
-			(*profiles)[i].Avatar.Head = "https://uzsk.iamtakagi.net/avatar/face/bedrock" + bedrock.XUID
-			(*profiles)[i].Avatar.Head = "https://uzsk.iamtakagi.net/avatar/head/bedrock" + bedrock.XUID
-			(*profiles)[i].Avatar.Body = "https://uzsk.iamtakagi.net/avatar/body/bedrock" + bedrock.XUID
+			(*profiles)[i].Avatar.Face = "https://uzsk.iamtakagi.net/api/avatar/face/bedrock" + bedrock.XUID
+			(*profiles)[i].Avatar.Head = "https://uzsk.iamtakagi.net/api/avatar/head/bedrock" + bedrock.XUID
+			(*profiles)[i].Avatar.Body = "https://uzsk.iamtakagi.net/api/avatar/body/bedrock" + bedrock.XUID
 
 			if err != nil {
 				return nil
@@ -102,7 +102,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 			(*profiles)[i].IsBedrock = false
 			(*profiles)[i].XUID = ""
 			(*profiles)[i].Name, err = mojangApi.GetNameByUUID(profile.UUID)
-			(*profiles)[i].Avatar.Head = "https://crafatar.com/avatars/" + profile.UUID
+			(*profiles)[i].Avatar.Face = "https://crafatar.com/avatars/" + profile.UUID
 			(*profiles)[i].Avatar.Head = "https://crafatar.com/renders/head/" + profile.UUID
 			(*profiles)[i].Avatar.Body = "https://crafatar.com/renders/body/" + profile.UUID
 
