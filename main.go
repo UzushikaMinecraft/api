@@ -88,6 +88,18 @@ func main() {
 		return c.JSON(services.GetProfile(db, c.Params("uuid")))
 	})
 
+	// - /api/skin/head/bedrock/:xuid
+	app.Get("/api/skin/head/bedrock/:xuid", func(c *fiber.Ctx) error {
+		c.Set("Content-Type", "image/png")
+		
+		img, err := services.GetBedrockHeadBySkinRender(c.Params("xuid"))
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		return c.SendStream(img)
+	})
+
 	// Swagger
 	app.Get("/api/swagger/*", swagger.HandlerDefault)
 
