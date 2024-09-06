@@ -141,6 +141,9 @@ func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 		profile.IsBedrock = true
 		profile.XUID = bedrock.XUID
 		profile.Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
+		profile.Avatar.Face = "https://uzsk.iamtakagi.net/api/avatar/face/bedrock/" + bedrock.XUID
+		profile.Avatar.Head = "https://uzsk.iamtakagi.net/api/avatar/head/bedrock/" + bedrock.XUID
+		profile.Avatar.Body = "https://uzsk.iamtakagi.net/api/avatar/body/bedrock/" + bedrock.XUID
 
 		if err != nil {
 			return nil
@@ -150,6 +153,9 @@ func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 		profile.IsBedrock = false
 		profile.XUID = ""
 		profile.Name, err = mojangApi.GetNameByUUID(profile.UUID)
+		profile.Avatar.Face = "https://crafatar.com/avatars/" + profile.UUID
+		profile.Avatar.Head = "https://crafatar.com/renders/head/" + profile.UUID
+		profile.Avatar.Body = "https://crafatar.com/renders/body/" + profile.UUID
 
 		if err != nil {
 			return nil
