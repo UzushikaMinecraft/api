@@ -14,8 +14,15 @@ type Profile struct {
 	TotalBuildBlocks   int       `gorm:"column:total_build_blocks; default:0;" json:"total_build_blocks"`
 	TotalDestroyBlocks int       `gorm:"column:total_destroy_blocks; default:0;" json:"total_destroy_blocks"`
 	TotalMobKills      int       `gorm:"column:total_mob_kills; default:0;" json:"total_mob_kills"`
-	IsBedrock          bool      `gorm:"column:is_bedrock; default:false;" json:"is_bedrock"`
-	XUID               string    `gorm:"column:xuid; default:null;" json:"xuid"`
+	IsBedrock          bool      `gorm:"-" json:"is_bedrock"`
+	XUID               string    `gorm:"-" json:"xuid"`
+	Avatar			   Avatar    `gorm:"-" json:"avatar"`
+}
+
+type Avatar struct {
+	Face string `json:"face"`
+	Head string `json:"head"`
+	Body string `json:"body"`
 }
 
 func (Profile) TableName() string {

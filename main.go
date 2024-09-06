@@ -88,11 +88,35 @@ func main() {
 		return c.JSON(services.GetProfile(db, c.Params("uuid")))
 	})
 
-	// - /api/skin/head/bedrock/:xuid
-	app.Get("/api/skin/head/bedrock/:xuid", func(c *fiber.Ctx) error {
+	// - /api/avatar/face/bedrock/:xuid
+	app.Get("/api/avatar/face/bedrock/:xuid", func(c *fiber.Ctx) error {
+		c.Set("Content-Type", "image/png")
+		
+		img, err := services.GetBedrockFaceBySkinRender(c.Params("xuid"))
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		return c.SendStream(img)
+	})
+
+	// - /api/avatar/head/bedrock/:xuid
+	app.Get("/api/avatar/head/bedrock/:xuid", func(c *fiber.Ctx) error {
 		c.Set("Content-Type", "image/png")
 		
 		img, err := services.GetBedrockHeadBySkinRender(c.Params("xuid"))
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		return c.SendStream(img)
+	})
+
+	// - /api/avatar/body/bedrock/:xuid
+	app.Get("/api/avatar/body/bedrock/:xuid", func(c *fiber.Ctx) error {
+		c.Set("Content-Type", "image/png")
+		
+		img, err := services.GetBedrockBodyBySkinRender(c.Params("xuid"))
 		if err != nil {
 			return c.SendStatus(500)
 		}
