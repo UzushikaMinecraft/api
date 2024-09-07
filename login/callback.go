@@ -7,8 +7,10 @@ import (
 	"io"
 	"net/http"
 	"net/http/httputil"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/structs"
 )
@@ -25,6 +27,7 @@ import (
 // @Failure 500 {object} structs.Error
 // @Router /login/callback [get]
 func Callback(c *fiber.Ctx) error {
+	// read `state` parameter to validate OAuth request
 	state := c.Query("state")
 	if state != config.Conf.Credentials.State {
 		return c.Status(400).JSON(structs.Error{
@@ -32,6 +35,7 @@ func Callback(c *fiber.Ctx) error {
 		})
 	}
 
+	// read `code` parameter to get a token
 	code := c.Query("code")
 	if code == "" {
 		return c.Status(400).JSON(structs.Error{
@@ -39,6 +43,7 @@ func Callback(c *fiber.Ctx) error {
 		})
 	}
 
+	// OAuth exchange phase
 	cxt := context.Background()
 
 	token, err := oauthConf.Exchange(
@@ -55,6 +60,7 @@ func Callback(c *fiber.Ctx) error {
 		})
 	}
 
+	// retrieve user information from Discord
 	url := "https://discordapp.com/api/users/@me"
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -90,9 +96,26 @@ func Callback(c *fiber.Ctx) error {
 	var user structs.DiscordUser
 	if err := json.Unmarshal(b, &user); err != nil {
 		return c.Status(500).JSON(structs.Error{
-			Error: fmt.Sprintf("Failed to parse Discord's JSON: %v", err),
+			Error: fmt.Sprintf("failed to parse Discord's JSON: %v", err),
 		})
 	}
 
-	return c.Status(200).JSON(user)
+	// generate JWT token
+	claims := jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	}
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	jwtAccessToken, err := jwtToken.SignedString([]byte(config.Conf.Credentials.JWTToken))
+	if err != nil {
+		return c.Status(500).JSON(structs.Error{
+			Error: fmt.Sprintf("error occured while generating JWT token: %v", err),
+		})
+	}
+
+	return c.Status(200).JSON(
+		structs.JWTResponse{
+			JwtToken: jwtAccessToken,
+		},
+	)
 }

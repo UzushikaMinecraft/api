@@ -15,6 +15,7 @@
 
 [credentials]
     state = "randomstate"
+    jwt_secret = "randomsecret"
 
 [credentials.discord]
     client_id = ""

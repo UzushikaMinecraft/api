@@ -20,8 +20,9 @@ type General struct {
 }
 
 type Credentials struct {
-	State   string
-	Discord CredentialsDiscord
+	State    string
+	JWTToken string `toml:"jwt_token"`
+	Discord  CredentialsDiscord
 }
 
 type CredentialsDiscord struct {

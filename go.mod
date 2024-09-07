@@ -34,6 +34,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.0.0-beta.3 // indirect
 	github.com/gofiber/swagger v1.1.0 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.6 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/s2a-go v0.1.8 // indirect
