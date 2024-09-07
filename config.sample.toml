@@ -11,7 +11,6 @@
     database = "uzsk"
 
 [general]
-    jwt_secret = ""
     callback_url = "http://localhost:3000/api/login/callback"
 
 [credentials]

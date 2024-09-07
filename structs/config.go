@@ -16,7 +16,6 @@ type MySQL struct {
 }
 
 type General struct {
-	JWTSecret   string
 	CallbackURL string `toml:"callback_url"`
 }
 
