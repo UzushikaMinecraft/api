@@ -26,7 +26,7 @@ type SkinResponse struct {
 	Value      string `json:"value"`
 }
 
-// GetGamertagByXUID fetches the gamertag for a given XUID using the GeyserMC API
+// fetch Gamertag by XUID from Geyser
 func (api *GeyserApi) GetGamertagByXUID(xuid string) (string, error) {
 	url := fmt.Sprintf("https://api.geysermc.org/v2/xbox/gamertag/%s", xuid)
 	method := "GET"
@@ -49,7 +49,6 @@ func (api *GeyserApi) GetGamertagByXUID(xuid string) (string, error) {
 		return "", err
 	}
 
-	// Unmarshal the response into the GamertagResponse struct
 	var response GamertagResponse
 	if err := json.Unmarshal(body, &response); err != nil {
 		return "", err
@@ -58,6 +57,7 @@ func (api *GeyserApi) GetGamertagByXUID(xuid string) (string, error) {
 	return response.Gamertag, nil
 }
 
+// fetch XUID by Gamertag from Geyser
 func (api *GeyserApi) GetXUIDbyGamertag(xuid string) (string, error) {
 	url := fmt.Sprintf("https://api.geysermc.org/v2/xbox/xuid/%s", xuid)
 	method := "GET"
@@ -89,6 +89,7 @@ func (api *GeyserApi) GetXUIDbyGamertag(xuid string) (string, error) {
 	return response.XUID, nil
 }
 
+// // fetch skin by XUID from Geyser
 // https://api.geysermc.org/v2/skin/{xuid}
 func (api *GeyserApi) GetSkinByXUID(xuid string) (*SkinResponse, error) {
 	url := fmt.Sprintf("https://api.geysermc.org/v2/skin/%s", xuid)
@@ -112,7 +113,6 @@ func (api *GeyserApi) GetSkinByXUID(xuid string) (*SkinResponse, error) {
 		return nil, err
 	}
 
-	// Unmarshal the response into the SkinResponse struct
 	var response *SkinResponse
 	if err := json.Unmarshal(body, &response); err != nil {
 		return nil, err
