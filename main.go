@@ -12,8 +12,8 @@ import (
 	"github.com/gofiber/swagger"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/dev"
-	"github.com/uzushikaminecraft/api/discord"
 	_ "github.com/uzushikaminecraft/api/docs"
+	"github.com/uzushikaminecraft/api/login"
 	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
 	"gorm.io/driver/mysql"
@@ -59,7 +59,7 @@ func main() {
 	db.AutoMigrate(&structs.Profile{})
 
 	// Init Discord OAuth
-	discord.Init()
+	login.Init()
 
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
@@ -133,8 +133,8 @@ func main() {
 	}))
 
 	// OAuth callback endpoint
-	app.Get("/api/login", discord.Login)
-	app.Get("/api/login/callback", discord.Callback)
+	app.Get("/api/login", login.Login)
+	app.Get("/api/login/callback", login.Callback)
 
 	// Run the web server
 	log.Fatal(app.Listen(":3000"))

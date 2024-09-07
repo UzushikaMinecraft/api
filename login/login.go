@@ -1,4 +1,4 @@
-package discord
+package login
 
 import (
 	"github.com/gofiber/fiber/v2"
