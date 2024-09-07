@@ -9,11 +9,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/uzushikaminecraft/api/config"
+	"github.com/uzushikaminecraft/api/controller"
 	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/dev"
 	_ "github.com/uzushikaminecraft/api/docs"
 	"github.com/uzushikaminecraft/api/login"
-	"github.com/uzushikaminecraft/api/routes"
 )
 
 // @title uzsk-api
@@ -56,7 +56,7 @@ func main() {
 	app := fiber.New()
 
 	// Setup routes
-	routes.SetupRoutes(app)
+	controller.SetupRoutes(app)
 
 	// CORS settings
 	app.Use(cors.New(cors.Config{
