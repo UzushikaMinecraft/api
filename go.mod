@@ -1,6 +1,6 @@
 module github.com/uzushikaminecraft/api
 
-go 1.23
+go 1.21
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
