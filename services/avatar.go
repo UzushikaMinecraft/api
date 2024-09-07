@@ -23,7 +23,7 @@ import (
 // @Param part path string true "which part to retrieve"
 // @Param xuid path string true "XUID of target Bedrock player"
 // @Failure 500 {object} structs.Error
-// @Router /api/avatar/{part}/bedrock/{xuid} [get]
+// @Router /avatar/{part}/bedrock/{xuid} [get]
 func RenderBedrockSkin(xuid string, part string) (*bytes.Buffer, error) {
 	geyserApi := &external_api.GeyserApi{}
 	res, err := geyserApi.GetSkinByXUID(xuid)

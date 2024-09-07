@@ -1,20 +1,19 @@
 package config
 
 import (
-	"log"
-
 	"github.com/BurntSushi/toml"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-func Init(path string) structs.Config {
+var Conf structs.Config
+
+func Init(path string) error {
 	// Init configuration
-	var Conf structs.Config
 	_, err := toml.DecodeFile(path, &Conf)
 
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
-	return Conf
+	return nil
 }

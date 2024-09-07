@@ -9,6 +9,36 @@ definitions:
       head:
         type: string
     type: object
+  structs.DiscordUser:
+    properties:
+      accent_color:
+        type: integer
+      avatar:
+        type: string
+      avatar_decoration_data: {}
+      banner: {}
+      banner_color:
+        type: string
+      clan: {}
+      discriminator:
+        type: string
+      flags:
+        type: integer
+      global_name:
+        type: string
+      id:
+        type: string
+      locale:
+        type: string
+      mfa_enabled:
+        type: boolean
+      premium_type:
+        type: integer
+      public_flags:
+        type: integer
+      username:
+        type: string
+    type: object
   structs.Error:
     properties:
       error:
@@ -67,7 +97,7 @@ info:
   title: uzsk-api
   version: "1.0"
 paths:
-  /api/avatar/{part}/bedrock/{xuid}:
+  /avatar/{part}/bedrock/{xuid}:
     get:
       description: Get the specified part of player's skin image
       parameters:
@@ -91,6 +121,49 @@ paths:
       summary: Get player's skin image
       tags:
       - avatar
+  /login:
+    get:
+      consumes:
+      - application/json
+      description: Login with Discord
+      produces:
+      - application/json
+      responses: {}
+      summary: Login with Discord
+      tags:
+      - login
+  /login/callback:
+    get:
+      consumes:
+      - application/json
+      description: callback endpoint for Discord login
+      parameters:
+      - description: Bearer token
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: Random state for validating request
+        in: query
+        name: state
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/structs.DiscordUser'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
+      summary: callback endpoint for Discord login
+      tags:
+      - login
   /profiles:
     get:
       consumes:

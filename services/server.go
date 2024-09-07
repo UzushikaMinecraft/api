@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/Craftserve/mcstatus"
+	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
@@ -15,10 +16,10 @@ import (
 // @Produce  json
 // @Success 200 {array} structs.Server
 // @Router /servers [get]
-func GetServers(config structs.Config) []structs.ServerStatus {
+func GetServers() []structs.ServerStatus {
 	servers := make([]structs.ServerStatus, 0)
-	for k := range config.Servers {
-		s, _ := GetServer(config, k)
+	for k := range config.Conf.Servers {
+		s, _ := GetServer(k)
 		servers = append(servers, *s)
 	}
 
@@ -35,8 +36,8 @@ func GetServers(config structs.Config) []structs.ServerStatus {
 // @Success 200 {array} structs.Server
 // @Failure 500 {object} structs.Error
 // @Router /servers/{name} [get]
-func GetServer(config structs.Config, name string) (*structs.ServerStatus, error) {
-	v, ok := config.Servers[name]
+func GetServer(name string) (*structs.ServerStatus, error) {
+	v, ok := config.Conf.Servers[name]
 
 	if !ok {
 		return &structs.ServerStatus{

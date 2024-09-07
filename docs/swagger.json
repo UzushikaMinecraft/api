@@ -17,7 +17,7 @@
     "host": "uzsk-api.iamtakagi.net",
     "basePath": "/api",
     "paths": {
-        "/api/avatar/{part}/bedrock/{xuid}": {
+        "/avatar/{part}/bedrock/{xuid}": {
             "get": {
                 "description": "Get the specified part of player's skin image",
                 "produces": [
@@ -44,6 +44,70 @@
                     }
                 ],
                 "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "get": {
+                "description": "Login with Discord",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "Login with Discord",
+                "responses": {}
+            }
+        },
+        "/login/callback": {
+            "get": {
+                "description": "callback endpoint for Discord login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "callback endpoint for Discord login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Random state for validating request",
+                        "name": "state",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/structs.DiscordUser"
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -243,6 +307,50 @@
                     "type": "string"
                 },
                 "head": {
+                    "type": "string"
+                }
+            }
+        },
+        "structs.DiscordUser": {
+            "type": "object",
+            "properties": {
+                "accent_color": {
+                    "type": "integer"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "avatar_decoration_data": {},
+                "banner": {},
+                "banner_color": {
+                    "type": "string"
+                },
+                "clan": {},
+                "discriminator": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "integer"
+                },
+                "global_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "locale": {
+                    "type": "string"
+                },
+                "mfa_enabled": {
+                    "type": "boolean"
+                },
+                "premium_type": {
+                    "type": "integer"
+                },
+                "public_flags": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }

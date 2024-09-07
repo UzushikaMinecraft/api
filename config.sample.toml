@@ -9,3 +9,14 @@
     user = "uzsk"
     password = "uzsk"
     database = "uzsk"
+
+[general]
+    jwt_secret = ""
+    callback_url = "http://localhost:3000/api/login/callback"
+
+[credentials]
+    state = "randomstate"
+
+[credentials.discord]
+    client_id = ""
+    client_secret = ""

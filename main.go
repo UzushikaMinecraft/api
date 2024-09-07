@@ -12,6 +12,7 @@ import (
 	"github.com/gofiber/swagger"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/dev"
+	"github.com/uzushikaminecraft/api/discord"
 	_ "github.com/uzushikaminecraft/api/docs"
 	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
@@ -36,16 +37,19 @@ func main() {
 	flag.Parse()
 
 	// Init config
-	Conf := config.Init(confPath)
+	err := config.Init(confPath)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	// Init db
 	dsn := fmt.Sprintf(
 		"%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
-		Conf.MySQL.User,
-		Conf.MySQL.Password,
-		Conf.MySQL.Host,
-		Conf.MySQL.Port,
-		Conf.MySQL.Database,
+		config.Conf.MySQL.User,
+		config.Conf.MySQL.Password,
+		config.Conf.MySQL.Host,
+		config.Conf.MySQL.Port,
+		config.Conf.MySQL.Database,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -54,9 +58,12 @@ func main() {
 	}
 	db.AutoMigrate(&structs.Profile{})
 
+	// Init Discord OAuth
+	discord.Init()
+
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
-		dev.CreateTestEntry(db)
+		dev.Init(db)
 	}
 
 	// Init web server
@@ -68,12 +75,12 @@ func main() {
 	// API routes
 	// - /api/servers
 	app.Get("/api/servers", func(c *fiber.Ctx) error {
-		return c.JSON(services.GetServers(Conf))
+		return c.JSON(services.GetServers())
 	})
 
 	// - /api/server
 	app.Get("/api/servers/:name", func(c *fiber.Ctx) error {
-		res, _ := services.GetServer(Conf, c.Params("name"))
+		res, _ := services.GetServer(c.Params("name"))
 		return c.JSON(res)
 	})
 
@@ -124,6 +131,10 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
+
+	// OAuth callback endpoint
+	app.Get("/api/login", discord.Login)
+	app.Get("/api/login/callback", discord.Callback)
 
 	// Run the web server
 	log.Fatal(app.Listen(":3000"))
