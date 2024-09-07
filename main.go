@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -11,13 +10,12 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
 	"github.com/uzushikaminecraft/api/config"
+	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/dev"
 	_ "github.com/uzushikaminecraft/api/docs"
 	"github.com/uzushikaminecraft/api/login"
 	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 // @title uzsk-api
@@ -43,27 +41,17 @@ func main() {
 	}
 
 	// Init db
-	dsn := fmt.Sprintf(
-		"%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
-		config.Conf.MySQL.User,
-		config.Conf.MySQL.Password,
-		config.Conf.MySQL.Host,
-		config.Conf.MySQL.Port,
-		config.Conf.MySQL.Database,
-	)
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	err = db.Init()
 	if err != nil {
-		log.Fatal("Failed to connect database", err)
+		log.Fatalln(err)
 	}
-	db.AutoMigrate(&structs.Profile{})
 
 	// Init Discord OAuth
 	login.Init()
 
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
-		dev.Init(db)
+		dev.Init(db.DB)
 	}
 
 	// Init web server
@@ -89,7 +77,7 @@ func main() {
 	app.Get("/api/profiles", func(c *fiber.Ctx) error {
 		m := c.Queries()
 
-		res, err := services.GetProfiles(db, m)
+		res, err := services.GetProfiles(db.DB, m)
 		if err != nil {
 			return c.Status(500).JSON(
 				structs.Error{
@@ -103,7 +91,7 @@ func main() {
 
 	// - /api/profiles/:uuid
 	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
-		res, _ := services.GetProfile(db, c.Params("uuid"))
+		res, _ := services.GetProfile(db.DB, c.Params("uuid"))
 		return c.JSON(res)
 	})
 
