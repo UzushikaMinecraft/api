@@ -1,7 +1,23 @@
 basePath: /api
 definitions:
+  structs.Avatar:
+    properties:
+      body:
+        type: string
+      face:
+        type: string
+      head:
+        type: string
+    type: object
+  structs.Error:
+    properties:
+      error:
+        type: string
+    type: object
   structs.Profile:
     properties:
+      avatar:
+        $ref: '#/definitions/structs.Avatar'
       currency:
         type: integer
       experience:
@@ -51,6 +67,30 @@ info:
   title: uzsk-api
   version: "1.0"
 paths:
+  /api/avatar/{part}/bedrock/{xuid}:
+    get:
+      description: Get the specified part of player's skin image
+      parameters:
+      - description: which part to retrieve
+        in: path
+        name: part
+        required: true
+        type: string
+      - description: XUID of target Bedrock player
+        in: path
+        name: xuid
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
+      summary: Get player's skin image
+      tags:
+      - avatar
   /profiles:
     get:
       consumes:
@@ -95,6 +135,10 @@ paths:
             items:
               $ref: '#/definitions/structs.Profile'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
       summary: Get profiles
       tags:
       - profiles
@@ -116,6 +160,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/structs.Profile'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
       summary: Get profile
       tags:
       - profiles
@@ -156,7 +204,11 @@ paths:
             items:
               $ref: '#/definitions/structs.Server'
             type: array
-      summary: Get servers
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
+      summary: Get server
       tags:
       - servers
 swagger: "2.0"

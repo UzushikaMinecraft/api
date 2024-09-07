@@ -10,10 +10,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
-	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/dev"
 	_ "github.com/uzushikaminecraft/api/docs"
+	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -65,62 +65,50 @@ func main() {
 		return c.SendString("200 OK")
 	})
 
+	// API routes
 	// - /api/servers
 	app.Get("/api/servers", func(c *fiber.Ctx) error {
 		return c.JSON(services.GetServers(Conf))
 	})
 
-	// API routes
 	// - /api/server
 	app.Get("/api/servers/:name", func(c *fiber.Ctx) error {
-		return c.JSON(services.GetServer(Conf, c.Params("name")))
+		res, _ := services.GetServer(Conf, c.Params("name"))
+		return c.JSON(res)
 	})
 
 	// Player
 	// - /api/profiles
 	app.Get("/api/profiles", func(c *fiber.Ctx) error {
 		m := c.Queries()
-		return c.JSON(services.GetProfiles(db, m))
+
+		res, err := services.GetProfiles(db, m)
+		if err != nil {
+			return c.Status(500).JSON(
+				structs.Error{
+					Error: err.Error(),
+				},
+			)
+		}
+
+		return c.JSON(res)
 	})
 
 	// - /api/profiles/:uuid
 	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
-		return c.JSON(services.GetProfile(db, c.Params("uuid")))
+		res, _ := services.GetProfile(db, c.Params("uuid"))
+		return c.JSON(res)
 	})
 
-	// - /api/avatar/face/bedrock/:xuid
-	app.Get("/api/avatar/face/bedrock/:xuid", func(c *fiber.Ctx) error {
+	// - /api/avatar/:part/bedrock/:xuid
+	app.Get("/api/avatar/:part/bedrock/:xuid", func(c *fiber.Ctx) error {
 		c.Set("Content-Type", "image/png")
-		
-		img, err := services.GetBedrockFaceBySkinRender(c.Params("xuid"))
+
+		img, err := services.RenderBedrockSkin(c.Params("xuid"), c.Params("part"))
 		if err != nil {
-			return c.SendStatus(500)
-		}
-
-		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
-		return c.SendStream(img)
-	})
-
-	// - /api/avatar/head/bedrock/:xuid
-	app.Get("/api/avatar/head/bedrock/:xuid", func(c *fiber.Ctx) error {
-		c.Set("Content-Type", "image/png")
-		
-		img, err := services.GetBedrockHeadBySkinRender(c.Params("xuid"))
-		if err != nil {
-			return c.SendStatus(500)
-		}
-
-		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
-		return c.SendStream(img)
-	})
-
-	// - /api/avatar/body/bedrock/:xuid
-	app.Get("/api/avatar/body/bedrock/:xuid", func(c *fiber.Ctx) error {
-		c.Set("Content-Type", "image/png")
-		
-		img, err := services.GetBedrockBodyBySkinRender(c.Params("xuid"))
-		if err != nil {
-			return c.SendStatus(500)
+			return c.Status(500).JSON(structs.Error{
+				Error: "Error occured while rendering image",
+			})
 		}
 
 		c.Response().Header.Set("Cache-Control", "public, max-age=86400, immutable")
@@ -130,11 +118,13 @@ func main() {
 	// Swagger
 	app.Get("/api/swagger/*", swagger.HandlerDefault)
 
+	// CORS settings
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 	}))
 
+	// Run the web server
 	log.Fatal(app.Listen(":3000"))
 }

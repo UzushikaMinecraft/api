@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/Craftserve/mcstatus"
 	"github.com/uzushikaminecraft/api/structs"
 )
@@ -16,38 +18,42 @@ import (
 func GetServers(config structs.Config) []structs.ServerStatus {
 	servers := make([]structs.ServerStatus, 0)
 	for k := range config.Servers {
-		servers = append(servers, *GetServer(config, k))
+		s, _ := GetServer(config, k)
+		servers = append(servers, *s)
 	}
 
 	return servers
 }
 
 // Get servers registered to uzsk-api
-// @Summary Get servers
+// @Summary Get server
 // @Description Get servers registered to uzsk-api
 // @Tags servers
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Name of target server"
 // @Success 200 {array} structs.Server
+// @Failure 500 {object} structs.Error
 // @Router /servers/{name} [get]
-func GetServer(config structs.Config, name string) *structs.ServerStatus {
+func GetServer(config structs.Config, name string) (*structs.ServerStatus, error) {
 	v, ok := config.Servers[name]
 
 	if !ok {
 		return &structs.ServerStatus{
-			Name:     name,
-			IsOnline: false,
-		}
+			Name:        name,
+			Description: &v.Description,
+			IsOnline:    false,
+		}, errors.New("specified server is not registered")
 	}
 
 	// Resolve FQDN
 	addr, err := mcstatus.Resolve(v.Address)
 	if err != nil {
 		return &structs.ServerStatus{
-			Name:     name,
-			IsOnline: false,
-		}
+			Name:        name,
+			Description: &v.Description,
+			IsOnline:    false,
+		}, errors.New("could not resolve hostname")
 	}
 
 	addr.Port = v.Port
@@ -57,9 +63,10 @@ func GetServer(config structs.Config, name string) *structs.ServerStatus {
 
 	if err != nil {
 		return &structs.ServerStatus{
-			Name:     name,
-			IsOnline: false,
-		}
+			Name:        name,
+			Description: &v.Description,
+			IsOnline:    false,
+		}, nil
 	}
 
 	return &structs.ServerStatus{
@@ -70,5 +77,5 @@ func GetServer(config structs.Config, name string) *structs.ServerStatus {
 		MaxPlayers:    &status.Slots,
 		Version:       &status.GameVersion,
 		PlayersSample: &status.PlayersSample,
-	}
+	}, nil
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -22,8 +23,9 @@ import (
 // @Param limit query int false "Limit for pagination" example(10) default(50)
 // @Param order_by query string false "Order by field" example(play_time)
 // @Success 200 {array} structs.Profile
+// @Failure 500 {object} structs.Error
 // @Router /profiles [get]
-func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
+func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile, error) {
 	var err error
 
 	// Check if required parameters were provided
@@ -38,7 +40,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 		sort = "asc"
 	}
 	if !(sort == "desc" || sort == "asc") {
-		return nil
+		return nil, errors.New("parameter sort is not valid")
 	}
 
 	// order_by
@@ -52,7 +54,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 	if offset_ok {
 		o, err = strconv.Atoi(offset)
 		if err != nil {
-			return nil
+			return nil, errors.New("parameter offset is not valid")
 		}
 	}
 
@@ -61,7 +63,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 	if limit_ok {
 		l, err := strconv.Atoi(limit)
 		if err != nil || l < 0 {
-			return nil
+			return nil, errors.New("parameter limit is not valid")
 		}
 		if l > 50 {
 			l = 50
@@ -71,7 +73,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 	}
 
 	if !(order_by == "id" || order_by == "uuid" || order_by == "experience" || order_by == "currency" || order_by == "total_build_blocks" || order_by == "total_destroy_blocks" || order_by == "total_mob_kills" || order_by == "total_play_time") {
-		return nil
+		return nil, errors.New("parameter order_by is not valid")
 	}
 
 	var profiles *[]structs.Profile
@@ -95,7 +97,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 			(*profiles)[i].Avatar.Body = "https://uzsk.iamtakagi.net/api/avatar/body/bedrock/" + bedrock.XUID
 
 			if err != nil {
-				return nil
+				return nil, errors.New("error occured while retrieving Bedrock user's skin")
 			}
 		} else {
 			mojangApi := &external_api.MojangApi{}
@@ -107,12 +109,12 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 			(*profiles)[i].Avatar.Body = "https://crafatar.com/renders/body/" + profile.UUID
 
 			if err != nil {
-				return nil
+				return nil, errors.New("error occured while retrieving Java user's skin")
 			}
 		}
 	}
 
-	return profiles
+	return profiles, nil
 }
 
 // Get profile by UUID
@@ -123,15 +125,16 @@ func GetProfiles(db *gorm.DB, m map[string]string) *[]structs.Profile {
 // @Produce  json
 // @Param uuid path string true "UUID of target profile"
 // @Success 200 {object} structs.Profile
+// @Failure 500 {object} structs.Error
 // @Router /profiles/{uuid} [get]
-func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
+func GetProfile(db *gorm.DB, uuid string) (*structs.Profile, error) {
 	var err error
-	
+
 	var profile *structs.Profile
 	db.Where("uuid = ?", uuid).First(&profile)
 
 	if profile.UUID == "" {
-		return nil
+		return nil, errors.New("UUID is not specified")
 	}
 
 	var bedrock *structs.Bedrock
@@ -146,7 +149,7 @@ func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 		profile.Avatar.Body = "https://uzsk.iamtakagi.net/api/avatar/body/bedrock/" + bedrock.XUID
 
 		if err != nil {
-			return nil
+			return nil, errors.New("could not find profile")
 		}
 	} else {
 		mojangApi := &external_api.MojangApi{}
@@ -158,9 +161,9 @@ func GetProfile(db *gorm.DB, uuid string) *structs.Profile {
 		profile.Avatar.Body = "https://crafatar.com/renders/body/" + profile.UUID
 
 		if err != nil {
-			return nil
+			return nil, errors.New("could not find profile")
 		}
 	}
 
-	return profile
+	return profile, nil
 }

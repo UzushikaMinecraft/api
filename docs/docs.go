@@ -23,6 +23,42 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/avatar/{part}/bedrock/{xuid}": {
+            "get": {
+                "description": "Get the specified part of player's skin image",
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "avatar"
+                ],
+                "summary": "Get player's skin image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "which part to retrieve",
+                        "name": "part",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "XUID of target Bedrock player",
+                        "name": "xuid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/profiles": {
             "get": {
                 "description": "Get a list of profiles with optional filtering and sorting, etc.",
@@ -86,6 +122,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/structs.Profile"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
                     }
                 }
             }
@@ -117,6 +159,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/structs.Profile"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
                         }
                     }
                 }
@@ -160,7 +208,7 @@ const docTemplate = `{
                 "tags": [
                     "servers"
                 ],
-                "summary": "Get servers",
+                "summary": "Get server",
                 "parameters": [
                     {
                         "type": "string",
@@ -179,15 +227,46 @@ const docTemplate = `{
                                 "$ref": "#/definitions/structs.Server"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
+        "structs.Avatar": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "face": {
+                    "type": "string"
+                },
+                "head": {
+                    "type": "string"
+                }
+            }
+        },
+        "structs.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
         "structs.Profile": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "$ref": "#/definitions/structs.Avatar"
+                },
                 "currency": {
                     "type": "integer"
                 },
