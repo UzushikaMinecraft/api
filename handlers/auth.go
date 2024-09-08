@@ -35,7 +35,7 @@ func HandleAuth(c *fiber.Ctx) error {
 // @Router /auth/callback [get]
 func HandleAuthCallback(c *fiber.Ctx) error {
 	jwtAccessToken, err := auth.Callback(
-		c.Params("state"), c.Params("code"),
+		c.Query("state"), c.Query("code"),
 	)
 
 	if err == nil {

@@ -17,12 +17,14 @@ import (
 func Callback(state string, code string) (*string, error) {
 	// read `state` parameter to validate OAuth request
 	if state != config.Conf.Credentials.State {
-		return nil, errors.New("state string does not match")
+		return nil, errors.New(
+			fmt.Sprintf("state string does not match: %v", state),
+		)
 	}
 
 	// read `code` parameter to get a token
 	if code == "" {
-		return nil, errors.New("required parameter is not provided")
+		return nil, errors.New("required parameter code is not provided")
 	}
 
 	// OAuth exchange phase
