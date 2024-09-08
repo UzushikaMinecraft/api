@@ -49,7 +49,7 @@ func main() {
 
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
-		dev.Init(db.DB)
+		dev.Init()
 	}
 
 	// Init web server

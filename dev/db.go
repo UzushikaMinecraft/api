@@ -3,11 +3,11 @@ package dev
 import (
 	"time"
 
+	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/structs"
-	"gorm.io/gorm"
 )
 
-func CreateTestEntry(db *gorm.DB) {
+func CreateTestEntry() {
 	profiles := []structs.Profile{
 		{
 			UUID:               "550e8400-e29b-41d4-a716-446655440000",
@@ -66,5 +66,5 @@ func CreateTestEntry(db *gorm.DB) {
 		},
 	}
 
-	db.Create(&profiles)
+	db.DB.Create(&profiles)
 }

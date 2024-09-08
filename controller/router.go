@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/login"
 	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
@@ -30,7 +29,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/profiles", func(c *fiber.Ctx) error {
 		m := c.Queries()
 
-		res, err := services.GetProfiles(db.DB, m)
+		res, err := services.GetProfiles(m)
 		if err != nil {
 			return c.Status(500).JSON(
 				structs.Error{
@@ -44,7 +43,7 @@ func SetupRoutes(app *fiber.App) {
 
 	// Retrieve players' profile from UUID
 	app.Get("/api/profiles/:uuid", func(c *fiber.Ctx) error {
-		res, _ := services.GetProfile(db.DB, c.Params("uuid"))
+		res, _ := services.GetProfile(c.Params("uuid"))
 		return c.JSON(res)
 	})
 

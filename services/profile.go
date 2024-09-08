@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/external_api"
 	"github.com/uzushikaminecraft/api/structs"
-
-	"gorm.io/gorm"
 )
 
 // Get profiles with query parameters
@@ -25,7 +24,7 @@ import (
 // @Success 200 {array} structs.Profile
 // @Failure 500 {object} structs.Error
 // @Router /profiles [get]
-func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile, error) {
+func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 	var err error
 
 	// Check if required parameters were provided
@@ -77,7 +76,7 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile, error) {
 	}
 
 	var profiles *[]structs.Profile
-	db.
+	db.DB.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("%v %v", order_by, sort)).
 		Offset(o).
@@ -86,7 +85,9 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile, error) {
 
 	for i, profile := range *profiles {
 		var bedrock *structs.Bedrock
-		db.Where("fuid = ?", profile.UUID).First(&bedrock)
+		db.DB.
+			Where("fuid = ?", profile.UUID).First(&bedrock)
+
 		if bedrock != nil && bedrock.XUID != "" {
 			geyserApi := &external_api.GeyserApi{}
 			(*profiles)[i].IsBedrock = true
@@ -127,18 +128,18 @@ func GetProfiles(db *gorm.DB, m map[string]string) (*[]structs.Profile, error) {
 // @Success 200 {object} structs.Profile
 // @Failure 500 {object} structs.Error
 // @Router /profiles/{uuid} [get]
-func GetProfile(db *gorm.DB, uuid string) (*structs.Profile, error) {
+func GetProfile(uuid string) (*structs.Profile, error) {
 	var err error
 
 	var profile *structs.Profile
-	db.Where("uuid = ?", uuid).First(&profile)
+	db.DB.Where("uuid = ?", uuid).First(&profile)
 
 	if profile.UUID == "" {
 		return nil, errors.New("UUID is not specified")
 	}
 
 	var bedrock *structs.Bedrock
-	db.Where("fuid = ?", profile.UUID).First(&bedrock)
+	db.DB.Where("fuid = ?", profile.UUID).First(&bedrock)
 	if bedrock != nil && bedrock.XUID != "" {
 		geyserApi := &external_api.GeyserApi{}
 		profile.IsBedrock = true

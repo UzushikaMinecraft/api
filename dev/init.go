@@ -4,17 +4,17 @@ import (
 	"log"
 
 	"github.com/uzushikaminecraft/api/config"
+	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/structs"
-	"gorm.io/gorm"
 )
 
-func Init(db *gorm.DB) {
+func Init() {
 	log.Println("Starting with development mode.")
 
 	var profile structs.Profile
-	res := db.First(&profile)
+	res := db.DB.First(&profile)
 	if res.Error != nil {
-		CreateTestEntry(db)
+		CreateTestEntry()
 	}
 
 	log.Println("Discord credentials: ", config.Conf.Credentials)
