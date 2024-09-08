@@ -3,12 +3,19 @@
     port = 25565
     description = "A Minecraft Server"
 
-[mysql]
+[mysql.core]
     host = "127.0.0.1"
     port = 3306
     user = "uzsk"
     password = "uzsk"
     database = "uzsk"
+
+[mysql.discordsrv]
+    host = "127.0.0.1"
+    port = 3306
+    user = "uzsk"
+    password = "uzsk"
+    database = "DiscordSRV"
 
 [general]
     callback_url = "http://localhost:3000/api/login/callback"

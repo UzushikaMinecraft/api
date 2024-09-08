@@ -62,7 +62,7 @@ func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 	}
 
 	var profiles *[]structs.Profile
-	db.DB.
+	db.Core.
 		Where("uuid LIKE ?", "%"+filter+"%").
 		Order(fmt.Sprintf("%v %v", order_by, sort)).
 		Offset(o).
@@ -71,7 +71,7 @@ func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 
 	for i, profile := range *profiles {
 		var bedrock *structs.Bedrock
-		db.DB.
+		db.Core.
 			Where("fuid = ?", profile.UUID).First(&bedrock)
 
 		if bedrock != nil && bedrock.XUID != "" {
@@ -108,14 +108,14 @@ func GetProfile(uuid string) (*structs.Profile, error) {
 	var err error
 
 	var profile *structs.Profile
-	db.DB.Where("uuid = ?", uuid).First(&profile)
+	db.Core.Where("uuid = ?", uuid).First(&profile)
 
 	if profile.UUID == "" {
 		return nil, errors.New("UUID is not specified")
 	}
 
 	var bedrock *structs.Bedrock
-	db.DB.Where("fuid = ?", profile.UUID).First(&bedrock)
+	db.Core.Where("fuid = ?", profile.UUID).First(&bedrock)
 	if bedrock != nil && bedrock.XUID != "" {
 		geyserApi := &external_api.GeyserApi{}
 		profile.IsBedrock = true

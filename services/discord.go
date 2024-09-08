@@ -13,10 +13,10 @@ func GetDiscordByUUID(uuid string) (*string, error) {
 		return nil, errors.New("uuid is not provided")
 	}
 
-	var u structs.DiscordSRVUser
+	var u structs.DiscordSrvAccounts
 
-	res := db.DB.
-		Where("discord == ?", uuid).
+	res := db.DiscordSRV.
+		Where("uuid == ?", uuid).
 		First(&u)
 
 	if res.RowsAffected == 0 {

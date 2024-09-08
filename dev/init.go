@@ -12,7 +12,7 @@ func Init() {
 	log.Println("Starting with development mode.")
 
 	var profile structs.Profile
-	res := db.DB.First(&profile)
+	res := db.Core.First(&profile)
 	if res.Error != nil {
 		CreateTestEntry()
 	}

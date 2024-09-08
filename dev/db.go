@@ -66,5 +66,5 @@ func CreateTestEntry() {
 		},
 	}
 
-	db.DB.Create(&profiles)
+	db.Core.Create(&profiles)
 }

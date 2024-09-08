@@ -8,11 +8,25 @@ type Config struct {
 }
 
 type MySQL struct {
+	Core       MySQLCore
+	DiscordSRV MySQLDiscordSRV
+}
+
+type MySQLCore struct {
 	User     string
 	Password string
 	Host     string
 	Port     int
 	Database string
+}
+
+type MySQLDiscordSRV struct {
+	User     string
+	Password string
+	Host     string
+	Port     int
+	Database string
+	Prefix   string
 }
 
 type General struct {

@@ -1,5 +1,9 @@
 package structs
 
+import (
+	"fmt"
+)
+
 type DiscordUser struct {
 	ID                   string `json:"id"`
 	Username             string `json:"username"`
@@ -18,8 +22,14 @@ type DiscordUser struct {
 	PremiumType          int    `json:"premium_type"`
 }
 
-type DiscordSRVUser struct {
+type DiscordSrvAccounts struct {
 	Link    int    `gorm:"column:link;primaryKey;autoIncrement" json:"id"`
 	Discord string `gorm:"column:discord;not null;type:varchar(32);not null" json:"discord"`
 	UUID    string `gorm:"column:uuid;not null;type:varchar(36);not null" json:"uuid"`
+}
+
+func (DiscordSrvAccounts) TableName() string {
+	return fmt.Sprintf(
+		"discordsrv_accounts",
+	)
 }
