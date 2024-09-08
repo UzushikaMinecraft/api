@@ -16,13 +16,18 @@ type Profile struct {
 	TotalMobKills      int       `gorm:"column:total_mob_kills; default:0;" json:"total_mob_kills"`
 	IsBedrock          bool      `gorm:"-" json:"is_bedrock"`
 	XUID               string    `gorm:"-" json:"xuid"`
-	Avatar			   Avatar    `gorm:"-" json:"avatar"`
+	Avatar             Avatar    `gorm:"-" json:"avatar"`
+	Biography          string    `gorm:"column:biography" json:"biography"`
 }
 
 type Avatar struct {
 	Face string `json:"face"`
 	Head string `json:"head"`
 	Body string `json:"body"`
+}
+
+type Biography struct {
+	Biography string `json:"biography"`
 }
 
 func (Profile) TableName() string {

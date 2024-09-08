@@ -171,7 +171,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "login"
+                    "auth"
                 ],
                 "summary": "retrieve information of authenticated user",
                 "parameters": [
@@ -192,6 +192,62 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/me/biography": {
+            "post": {
+                "description": "update biography of authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "update biography of authenticated user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JSON Web Token",
+                        "name": "X-Auth-Token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "new biography",
+                        "name": "Biography",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.Biography"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Me"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/structs.Error"
                         }
@@ -390,6 +446,14 @@ const docTemplate = `{
                 }
             }
         },
+        "structs.Biography": {
+            "type": "object",
+            "properties": {
+                "biography": {
+                    "type": "string"
+                }
+            }
+        },
         "structs.Error": {
             "type": "object",
             "properties": {
@@ -422,6 +486,9 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "$ref": "#/definitions/structs.Avatar"
+                },
+                "biography": {
+                    "type": "string"
                 },
                 "currency": {
                     "type": "integer"

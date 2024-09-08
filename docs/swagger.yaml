@@ -8,6 +8,11 @@ definitions:
       head:
         type: string
     type: object
+  structs.Biography:
+    properties:
+      biography:
+        type: string
+    type: object
   structs.Error:
     properties:
       error:
@@ -29,6 +34,8 @@ definitions:
     properties:
       avatar:
         $ref: '#/definitions/structs.Avatar'
+      biography:
+        type: string
       currency:
         type: integer
       experience:
@@ -186,9 +193,46 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/structs.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
       summary: retrieve information of authenticated user
       tags:
-      - login
+      - auth
+  /me/biography:
+    post:
+      consumes:
+      - application/json
+      description: update biography of authenticated user
+      parameters:
+      - description: JSON Web Token
+        in: header
+        name: X-Auth-Token
+        required: true
+        type: string
+      - description: new biography
+        in: body
+        name: Biography
+        required: true
+        schema:
+          $ref: '#/definitions/structs.Biography'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.Me'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/structs.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
+      summary: update biography of authenticated user
+      tags:
+      - auth
   /profiles:
     get:
       consumes:

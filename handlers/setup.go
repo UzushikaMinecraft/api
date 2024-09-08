@@ -42,6 +42,7 @@ func Setup() {
 	// /api/me
 	me := api.Group("/me")
 	me.Get("/", HandleMe)
+	me.Post("/biography", HandleMeBiography)
 
 	// /api/discord
 	discord := api.Group("/discord")
