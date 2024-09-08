@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/uzushikaminecraft/api/db"
-	"github.com/uzushikaminecraft/api/external_api"
+	"github.com/uzushikaminecraft/api/external"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
@@ -75,7 +75,7 @@ func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 			Where("fuid = ?", profile.UUID).First(&bedrock)
 
 		if bedrock != nil && bedrock.XUID != "" {
-			geyserApi := &external_api.GeyserApi{}
+			geyserApi := &external.GeyserApi{}
 			(*profiles)[i].IsBedrock = true
 			(*profiles)[i].XUID = bedrock.XUID
 			(*profiles)[i].Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
@@ -87,7 +87,7 @@ func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 				return nil, errors.New("error occured while retrieving Bedrock user's skin")
 			}
 		} else {
-			mojangApi := &external_api.MojangApi{}
+			mojangApi := &external.MojangApi{}
 			(*profiles)[i].IsBedrock = false
 			(*profiles)[i].XUID = ""
 			(*profiles)[i].Name, err = mojangApi.GetNameByUUID(profile.UUID)
@@ -117,7 +117,7 @@ func GetProfile(uuid string) (*structs.Profile, error) {
 	var bedrock *structs.Bedrock
 	db.Core.Where("fuid = ?", profile.UUID).First(&bedrock)
 	if bedrock != nil && bedrock.XUID != "" {
-		geyserApi := &external_api.GeyserApi{}
+		geyserApi := &external.GeyserApi{}
 		profile.IsBedrock = true
 		profile.XUID = bedrock.XUID
 		profile.Name, err = geyserApi.GetGamertagByXUID(bedrock.XUID)
@@ -129,7 +129,7 @@ func GetProfile(uuid string) (*structs.Profile, error) {
 			return nil, errors.New("could not find profile")
 		}
 	} else {
-		mojangApi := &external_api.MojangApi{}
+		mojangApi := &external.MojangApi{}
 		profile.IsBedrock = false
 		profile.XUID = ""
 		profile.Name, err = mojangApi.GetNameByUUID(profile.UUID)

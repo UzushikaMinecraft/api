@@ -12,11 +12,11 @@ import (
 	"net/http"
 
 	"github.com/mineatar-io/skin-render"
-	"github.com/uzushikaminecraft/api/external_api"
+	"github.com/uzushikaminecraft/api/external"
 )
 
 func RenderBedrockSkin(xuid string, part string) (*bytes.Buffer, error) {
-	geyserApi := &external_api.GeyserApi{}
+	geyserApi := &external.GeyserApi{}
 	res, err := geyserApi.GetSkinByXUID(xuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get skin by XUID: %w", err)

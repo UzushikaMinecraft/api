@@ -1,4 +1,4 @@
-package external_api
+package external
 
 import (
 	"encoding/json"
