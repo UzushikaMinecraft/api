@@ -31,7 +31,6 @@ func HandleAuth(c *fiber.Ctx) error {
 // @Param code query string true "Bearer token"
 // @Param state query string true "Random state for validating request"
 // @Success 200 {array} structs.JWTResponse
-// @Header 200 {string} X-Auth-Token
 // @Failure 500 {object} structs.Error
 // @Router /auth/callback [get]
 func HandleAuthCallback(c *fiber.Ctx) error {

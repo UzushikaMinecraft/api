@@ -10,13 +10,21 @@ import (
 // @Description retrieve information of authenticated user
 // @Tags auth
 // @Accept json
-// @Param X-Auth-Token header string true "JSON Web Token"
 // @Success 200 {object} structs.Me
 // @Failure 400 {object} structs.Error
 // @Failure 500 {object} structs.Error
 // @Router /me [get]
 func HandleMe(c *fiber.Ctx) error {
-	res, err := services.GetMe(c.Get("X-Auth-Token"))
+	cookie := new(structs.CoreCookie)
+	if err := c.CookieParser(cookie); err != nil {
+		c.Status(301).Redirect("/api/auth")
+	}
+
+	if cookie.JWT == "" || cookie == nil {
+		c.Status(301).Redirect("/api/auth")
+	}
+
+	res, err := services.GetMe(cookie.JWT)
 
 	if err == nil {
 		return c.Status(200).JSON(
@@ -43,7 +51,6 @@ func HandleMe(c *fiber.Ctx) error {
 // @Description update biography of authenticated user
 // @Tags auth
 // @Accept json
-// @Param X-Auth-Token header string true "JSON Web Token"
 // @Param Biography body structs.Biography true "new biography"
 // @Success 200 {object} structs.Me
 // @Failure 400 {object} structs.Error
@@ -59,8 +66,17 @@ func HandleMeBiography(c *fiber.Ctx) error {
 		)
 	}
 
+	cookie := new(structs.CoreCookie)
+	if err := c.CookieParser(cookie); err != nil {
+		c.Status(301).Redirect("/api/auth")
+	}
+
+	if cookie.JWT == "" || cookie == nil {
+		c.Status(301).Redirect("/api/auth")
+	}
+
 	res, err := services.UpdateBiography(
-		c.Get("X-Auth-Token"), b.Biography,
+		cookie.JWT, b.Biography,
 	)
 
 	if err == nil {
