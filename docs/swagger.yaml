@@ -97,6 +97,29 @@ info:
   title: uzsk-api
   version: "1.0"
 paths:
+  /api/discord/{uuid}:
+    get:
+      description: fetch UUID from provided Discord ID
+      parameters:
+      - description: who to retrieve
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/structs.Error'
+      summary: fetch UUID from provided Discord ID
+      tags:
+      - discord
   /avatar/{part}/bedrock/{xuid}:
     get:
       description: Get the specified part of player's skin image
@@ -162,6 +185,23 @@ paths:
           schema:
             $ref: '#/definitions/structs.Error'
       summary: callback endpoint for Discord login
+      tags:
+      - login
+  /me:
+    get:
+      consumes:
+      - application/json
+      description: retrieve information of authenticated user
+      parameters:
+      - description: JSON Web Token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: retrieve information of authenticated user
       tags:
       - login
   /profiles:

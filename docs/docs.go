@@ -23,6 +23,41 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/discord/{uuid}": {
+            "get": {
+                "description": "fetch UUID from provided Discord ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discord"
+                ],
+                "summary": "fetch UUID from provided Discord ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "who to retrieve",
+                        "name": "uuid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/avatar/{part}/bedrock/{xuid}": {
             "get": {
                 "description": "Get the specified part of player's skin image",
@@ -121,6 +156,31 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/me": {
+            "get": {
+                "description": "retrieve information of authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "retrieve information of authenticated user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JSON Web Token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         },
         "/profiles": {
