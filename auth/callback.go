@@ -3,45 +3,26 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"net/http/httputil"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-// callback endpoint for Discord login
-// @Summary callback endpoint for Discord login
-// @Description callback endpoint for Discord login
-// @Tags login
-// @Accept  json
-// @Produce  json
-// @Param code query string true "Bearer token"
-// @Param state query string true "Random state for validating request"
-// @Success 200 {array} structs.JWTResponse
-// @Header 200 {string} X-Auth-Token
-// @Failure 500 {object} structs.Error
-// @Router /login/callback [get]
-func Callback(c *fiber.Ctx) error {
+func Callback(state string, code string) (*string, error) {
 	// read `state` parameter to validate OAuth request
-	state := c.Query("state")
 	if state != config.Conf.Credentials.State {
-		return c.Status(400).JSON(structs.Error{
-			Error: "state string does not match. are you doing bad thing?",
-		})
+		return nil, errors.New("state string does not match")
 	}
 
 	// read `code` parameter to get a token
-	code := c.Query("code")
 	if code == "" {
-		return c.Status(400).JSON(structs.Error{
-			Error: "required parameter is not provided",
-		})
+		return nil, errors.New("required parameter is not provided")
 	}
 
 	// OAuth exchange phase
@@ -51,54 +32,47 @@ func Callback(c *fiber.Ctx) error {
 		cxt, code,
 	)
 	if err != nil {
-		return c.Status(400).JSON(structs.Error{
-			Error: "failed to exchange token",
-		})
+		return nil, errors.New("failed to exchange token")
 	}
 	if token == nil {
-		return c.Status(400).JSON(structs.Error{
-			Error: "failed to contact with Discord",
-		})
+		return nil, errors.New("failed to contact with Discord")
 	}
 
 	// retrieve user information from Discord
 	url := "https://discordapp.com/api/users/@me"
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return c.Status(500).JSON(structs.Error{
-			Error: "error occured while making request",
-		})
+		return nil, errors.New("error occured while making request")
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", token.AccessToken))
-
-	b, err := httputil.DumpRequest(req, true)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(string(b))
-	}
 
 	client := new(http.Client)
 	resp, err := client.Do(req)
 	if err != nil {
-		return c.Status(500).JSON(structs.Error{
-			Error: "error occured while executing request",
-		})
+		return nil, errors.New("error occured while executing request")
 	}
 	defer resp.Body.Close()
 
-	b, err = io.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 	if resp.StatusCode != 200 {
-		return c.Status(500).JSON(structs.Error{
-			Error: fmt.Sprintf("Discord returned status code %v: %v", resp.StatusCode, string(b)),
-		})
+		return nil,
+			errors.New(
+				fmt.Sprintf(
+					"Discord returned status code %v: %v",
+					resp.StatusCode, string(b),
+				),
+			)
 	}
 
 	var user structs.DiscordUser
 	if err := json.Unmarshal(b, &user); err != nil {
-		return c.Status(500).JSON(structs.Error{
-			Error: fmt.Sprintf("failed to parse Discord's JSON: %v", err),
-		})
+		return nil,
+			errors.New(
+				fmt.Sprintf(
+					"failed to parse Discord's JSON: %v",
+					err,
+				),
+			)
 	}
 
 	// generate JWT token
@@ -109,15 +83,14 @@ func Callback(c *fiber.Ctx) error {
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	jwtAccessToken, err := jwtToken.SignedString([]byte(config.Conf.Credentials.JWTToken))
 	if err != nil {
-		return c.Status(500).JSON(structs.Error{
-			Error: fmt.Sprintf("error occured while generating JWT token: %v", err),
-		})
+		return nil,
+			errors.New(
+				fmt.Sprintf(
+					"error occured while generating JWT token: %v",
+					err,
+				),
+			)
 	}
 
-	c.Response().Header.Add("X-Auth-Token", jwtAccessToken)
-	return c.Status(200).JSON(
-		structs.JWTResponse{
-			Success: true,
-		},
-	)
+	return &jwtAccessToken, nil
 }

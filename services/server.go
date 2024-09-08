@@ -8,14 +8,6 @@ import (
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-// Get servers registered to uzsk-api
-// @Summary Get servers
-// @Description Get servers registered to uzsk-api
-// @Tags servers
-// @Accept  json
-// @Produce  json
-// @Success 200 {array} structs.Server
-// @Router /servers [get]
 func GetServers() []structs.ServerStatus {
 	servers := make([]structs.ServerStatus, 0)
 	for k := range config.Conf.Servers {
@@ -26,16 +18,6 @@ func GetServers() []structs.ServerStatus {
 	return servers
 }
 
-// Get servers registered to uzsk-api
-// @Summary Get server
-// @Description Get servers registered to uzsk-api
-// @Tags servers
-// @Accept  json
-// @Produce  json
-// @Param name path string true "Name of target server"
-// @Success 200 {object} structs.Server
-// @Failure 500 {object} structs.Error
-// @Router /servers/{name} [get]
 func GetServer(name string) (*structs.ServerStatus, error) {
 	v, ok := config.Conf.Servers[name]
 

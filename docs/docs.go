@@ -9,15 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "https://uzsk.iamtakagi.net",
-        "contact": {
-            "name": "yude",
-            "email": "i@yude.jp"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/license/mit"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -58,43 +50,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/avatar/{part}/bedrock/{xuid}": {
-            "get": {
-                "description": "Get the specified part of player's skin image",
-                "produces": [
-                    "image/png"
-                ],
-                "tags": [
-                    "avatar"
-                ],
-                "summary": "Get player's skin image",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "which part to retrieve",
-                        "name": "part",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "XUID of target Bedrock player",
-                        "name": "xuid",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/structs.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/login": {
+        "/auth": {
             "get": {
                 "description": "Login with Discord",
                 "consumes": [
@@ -107,10 +63,19 @@ const docTemplate = `{
                     "login"
                 ],
                 "summary": "Login with Discord",
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/login/callback": {
+        "/auth/callback": {
             "get": {
                 "description": "callback endpoint for Discord login",
                 "consumes": [
@@ -154,6 +119,42 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/avatar/{part}/bedrock/{xuid}": {
+            "get": {
+                "description": "Get the specified part of player's skin image",
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "avatar"
+                ],
+                "summary": "Get player's skin image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "which part to retrieve",
+                        "name": "part",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "XUID of target Bedrock player",
+                        "name": "xuid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -482,12 +483,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "uzsk-api.iamtakagi.net",
-	BasePath:         "/api",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "uzsk-api",
-	Description:      "Public Web API for uzsk.iamtakagi.net",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

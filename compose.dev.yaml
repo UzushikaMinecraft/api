@@ -5,5 +5,7 @@ services:
       - ./dev/initdb.d:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=UzskCore
     ports:
       - 33060:3306
+    command: --general-log-file=/dev/stdout

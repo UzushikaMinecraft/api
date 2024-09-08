@@ -7,15 +7,6 @@ import (
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-// retrieve information of authenticated user
-// @Summary retrieve information of authenticated user
-// @Description retrieve information of authenticated user
-// @Tags login
-// @Accept json
-// @Param X-Auth-Token header string true "JSON Web Token"
-// @Success 200 {object} structs.Me
-// @Failure 400 {object} structs.Error
-// @Router /me [get]
 func GetMe(token string) (*structs.Me, error) {
 	if token == "" {
 		return nil, errors.New("token is not provided")

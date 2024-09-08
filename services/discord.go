@@ -1,28 +1,16 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-// fetch UUID from provided Discord ID
-// @Summary fetch UUID from provided Discord ID
-// @Description fetch UUID from provided Discord ID
-// @Tags discord
-// @Produce json
-// @Param uuid path string true "who to retrieve"
-// @Failure 200 {object} structs.UUID
-// @Failure 500 {object} structs.Error
-// @Router /api/discord/{uuid} [get]
-func GetUUIDByDiscord(c *fiber.Ctx) error {
-	uuid := c.Params("uuid")
+func GetDiscordByUUID(uuid string) (*string, error) {
 	if uuid == "" {
-		return c.Status(400).JSON(structs.Error{
-			Error: "uuid is not provided",
-		})
+		return nil, errors.New("uuid is not provided")
 	}
 
 	var u structs.DiscordSRVUser
@@ -32,19 +20,16 @@ func GetUUIDByDiscord(c *fiber.Ctx) error {
 		First(&u)
 
 	if res.RowsAffected == 0 {
-		return c.Status(404).JSON(structs.Error{
-			Error: "no players found",
-		})
+		return nil, errors.New("no players found")
 	}
 	if res.Error != nil {
-		return c.Status(500).JSON(structs.Error{
-			Error: fmt.Sprintf("error occured while processing request: %v", res.Error),
-		})
+		return nil, errors.New(
+			fmt.Sprintf(
+				"error occured while processing request: %v",
+				res.Error,
+			),
+		)
 	}
 
-	return c.Status(200).JSON(
-		structs.UUID{
-			UUID: u.UUID,
-		},
-	)
+	return &u.UUID, nil
 }

@@ -10,20 +10,6 @@ import (
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-// Get profiles with query parameters
-// @Summary Get profiles
-// @Description Get a list of profiles with optional filtering and sorting, etc.
-// @Tags profiles
-// @Accept  json
-// @Produce  json
-// @Param filter query string false "Filter criteria" example(550e8400-e29b-41d4-a716-446655440000) default()
-// @Param sort query string false "Sort order" example(desc) default(asc)
-// @Param offset query int false "Offset for pagination" example(0) default(0)
-// @Param limit query int false "Limit for pagination" example(10) default(50)
-// @Param order_by query string false "Order by field" example(play_time)
-// @Success 200 {array} structs.Profile
-// @Failure 500 {object} structs.Error
-// @Router /profiles [get]
 func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 	var err error
 
@@ -118,16 +104,6 @@ func GetProfiles(m map[string]string) (*[]structs.Profile, error) {
 	return profiles, nil
 }
 
-// Get profile by UUID
-// @Summary Get profile
-// @Description Get a profile by UUID
-// @Tags profiles
-// @Accept  json
-// @Produce  json
-// @Param uuid path string true "UUID of target profile"
-// @Success 200 {object} structs.Profile
-// @Failure 500 {object} structs.Error
-// @Router /profiles/{uuid} [get]
 func GetProfile(uuid string) (*structs.Profile, error) {
 	var err error
 

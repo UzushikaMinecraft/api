@@ -1,21 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Public Web API for uzsk.iamtakagi.net",
-        "title": "uzsk-api",
-        "termsOfService": "https://uzsk.iamtakagi.net",
-        "contact": {
-            "name": "yude",
-            "email": "i@yude.jp"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/license/mit"
-        },
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "uzsk-api.iamtakagi.net",
-    "basePath": "/api",
     "paths": {
         "/api/discord/{uuid}": {
             "get": {
@@ -52,43 +39,7 @@
                 }
             }
         },
-        "/avatar/{part}/bedrock/{xuid}": {
-            "get": {
-                "description": "Get the specified part of player's skin image",
-                "produces": [
-                    "image/png"
-                ],
-                "tags": [
-                    "avatar"
-                ],
-                "summary": "Get player's skin image",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "which part to retrieve",
-                        "name": "part",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "XUID of target Bedrock player",
-                        "name": "xuid",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/structs.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/login": {
+        "/auth": {
             "get": {
                 "description": "Login with Discord",
                 "consumes": [
@@ -101,10 +52,19 @@
                     "login"
                 ],
                 "summary": "Login with Discord",
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/login/callback": {
+        "/auth/callback": {
             "get": {
                 "description": "callback endpoint for Discord login",
                 "consumes": [
@@ -148,6 +108,42 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/avatar/{part}/bedrock/{xuid}": {
+            "get": {
+                "description": "Get the specified part of player's skin image",
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "avatar"
+                ],
+                "summary": "Get player's skin image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "which part to retrieve",
+                        "name": "part",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "XUID of target Bedrock player",
+                        "name": "xuid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {

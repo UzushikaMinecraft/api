@@ -15,15 +15,6 @@ import (
 	"github.com/uzushikaminecraft/api/external_api"
 )
 
-// fetch specified part of Bedrock players' skin from Geyser
-// @Summary Get player's skin image
-// @Description Get the specified part of player's skin image
-// @Tags avatar
-// @Produce  png
-// @Param part path string true "which part to retrieve"
-// @Param xuid path string true "XUID of target Bedrock player"
-// @Failure 500 {object} structs.Error
-// @Router /avatar/{part}/bedrock/{xuid} [get]
 func RenderBedrockSkin(xuid string, part string) (*bytes.Buffer, error) {
 	geyserApi := &external_api.GeyserApi{}
 	res, err := geyserApi.GetSkinByXUID(xuid)
