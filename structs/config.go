@@ -1,7 +1,7 @@
 package structs
 
 type Config struct {
-	Servers     map[string]Server
+	Servers     map[string]RegisteredServer
 	MySQL       MySQL
 	General     General
 	Credentials Credentials
@@ -42,4 +42,10 @@ type Credentials struct {
 type CredentialsDiscord struct {
 	ClientID     string `toml:"client_id"`
 	ClientSecret string `toml:"client_secret"`
+}
+
+type RegisteredServer struct {
+	Address     string
+	Port        int
+	Description string
 }

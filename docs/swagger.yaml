@@ -56,7 +56,7 @@ definitions:
       xuid:
         type: string
     type: object
-  structs.Server:
+  structs.RegisteredServer:
     properties:
       address:
         type: string
@@ -277,7 +277,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/structs.Server'
+              $ref: '#/definitions/structs.RegisteredServer'
             type: array
       summary: Get servers
       tags:
@@ -299,7 +299,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/structs.Server'
+            $ref: '#/definitions/structs.RegisteredServer'
         "500":
           description: Internal Server Error
           schema:

@@ -12,7 +12,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Name of target server"
-// @Success 200 {object} structs.Server
+// @Success 200 {object} structs.RegisteredServer
 // @Failure 500 {object} structs.Error
 // @Router /servers/{name} [get]
 func HandleServer(c *fiber.Ctx) error {
@@ -25,7 +25,7 @@ func HandleServer(c *fiber.Ctx) error {
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} structs.Server
+// @Success 200 {array} structs.RegisteredServer
 // @Router /servers [get]
 func HandleServers(c *fiber.Ctx) error {
 	return c.JSON(services.GetServers())

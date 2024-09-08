@@ -329,7 +329,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/structs.Server"
+                                "$ref": "#/definitions/structs.RegisteredServer"
                             }
                         }
                     }
@@ -362,7 +362,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/structs.Server"
+                            "$ref": "#/definitions/structs.RegisteredServer"
                         }
                     },
                     "500": {
@@ -464,7 +464,7 @@ const docTemplate = `{
                 }
             }
         },
-        "structs.Server": {
+        "structs.RegisteredServer": {
             "type": "object",
             "properties": {
                 "address": {
