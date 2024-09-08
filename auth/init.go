@@ -1,4 +1,4 @@
-package login
+package auth
 
 import (
 	"github.com/ravener/discord-oauth2"

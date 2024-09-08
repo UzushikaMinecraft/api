@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	"github.com/uzushikaminecraft/api/login"
+	"github.com/uzushikaminecraft/api/auth"
 	"github.com/uzushikaminecraft/api/services"
 	"github.com/uzushikaminecraft/api/structs"
 )
@@ -63,8 +63,8 @@ func SetupRoutes(app *fiber.App) {
 	})
 
 	// OAuth callback endpoint
-	app.Get("/api/login", login.Login)
-	app.Get("/api/login/callback", login.Callback)
+	app.Get("/api/login", auth.Login)
+	app.Get("/api/login/callback", auth.Callback)
 
 	// Swagger
 	app.Get("/api/swagger/*", swagger.HandlerDefault)

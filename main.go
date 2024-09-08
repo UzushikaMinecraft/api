@@ -8,12 +8,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/uzushikaminecraft/api/auth"
 	"github.com/uzushikaminecraft/api/config"
 	"github.com/uzushikaminecraft/api/controller"
 	"github.com/uzushikaminecraft/api/db"
 	"github.com/uzushikaminecraft/api/dev"
 	_ "github.com/uzushikaminecraft/api/docs"
-	"github.com/uzushikaminecraft/api/login"
 )
 
 // @title uzsk-api
@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// Init Discord OAuth
-	login.Init()
+	auth.Init()
 
 	// For development
 	if strings.Contains(os.Args[0], "go-build") {
