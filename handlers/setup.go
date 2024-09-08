@@ -4,8 +4,10 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
+	"github.com/uzushikaminecraft/api/config"
 )
 
 // @title uzsk-api
@@ -58,6 +60,11 @@ func Setup() {
 
 	// Logger
 	app.Use(logger.New())
+
+	// Encrypt cookie
+	app.Use(encryptcookie.New(encryptcookie.Config{
+		Key: config.Conf.Credentials.JWTToken,
+	}))
 
 	// Run the web server
 	log.Fatal(app.Listen(":4000"))
