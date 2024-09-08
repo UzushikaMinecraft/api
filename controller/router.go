@@ -67,7 +67,29 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/login/callback", auth.Callback)
 
 	// Personal information
-	app.Get("/api/me", auth.GetMe)
+	app.Get("/api/me", func(c *fiber.Ctx) error {
+		res, err := services.GetMe(c.Get("X-Auth-Token"))
+
+		if err == nil {
+			return c.Status(200).JSON(
+				res,
+			)
+		}
+
+		if err.Error() == "token is not provided" || err.Error() == "invalid token" {
+			return c.Status(400).JSON(
+				structs.Error{
+					Error: err.Error(),
+				},
+			)
+		}
+
+		return c.Status(500).JSON(
+			structs.Error{
+				Error: err.Error(),
+			},
+		)
+	})
 
 	// Retrieve UUID from provided Discord ID
 	app.Get("/api/discord/:uuid", services.GetUUIDByDiscord)

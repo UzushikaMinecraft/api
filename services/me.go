@@ -1,7 +1,9 @@
-package auth
+package services
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"errors"
+
+	"github.com/uzushikaminecraft/api/auth"
 	"github.com/uzushikaminecraft/api/structs"
 )
 
@@ -14,22 +16,18 @@ import (
 // @Success 200 {object} structs.Me
 // @Failure 400 {object} structs.Error
 // @Router /me [get]
-func GetMe(c *fiber.Ctx) error {
-	if c.Params("token") == "" {
-		return c.Status(400).JSON(structs.Error{
-			Error: "token is not provided",
-		})
+func GetMe(token string) (*structs.Me, error) {
+	if token == "" {
+		return nil, errors.New("token is not provided")
 	}
 
-	claims, err := Validate(c.Params("token"))
+	claims, err := auth.Validate(token)
 	if err != nil {
-		return c.Status(400).JSON(structs.Error{
-			Error: "invalid token",
-		})
+		return nil, errors.New("invalid token")
 	}
 
-	return c.Status(200).JSON(structs.Me{
+	return &structs.Me{
 		UserId:          claims["user_id"].(string),
 		SessionExpireAt: claims["exp"].(int64),
-	})
+	}, nil
 }
