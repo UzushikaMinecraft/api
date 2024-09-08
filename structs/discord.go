@@ -17,3 +17,9 @@ type DiscordUser struct {
 	Locale               string `json:"locale"`
 	PremiumType          int    `json:"premium_type"`
 }
+
+type DiscordSRVUser struct {
+	Link    int    `gorm:"column:link;primaryKey;autoIncrement" json:"id"`
+	Discord string `gorm:"column:discord;not null;type:varchar(32);not null" json:"discord"`
+	UUID    string `gorm:"column:uuid;not null;type:varchar(36);not null" json:"uuid"`
+}
