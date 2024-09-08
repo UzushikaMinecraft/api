@@ -112,11 +112,6 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/structs.JWTResponse"
                             }
-                        },
-                        "headers": {
-                            "X-Auth-Token": {
-                                "type": "string"
-                            }
                         }
                     },
                     "500": {
@@ -174,15 +169,6 @@ const docTemplate = `{
                     "auth"
                 ],
                 "summary": "retrieve information of authenticated user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JSON Web Token",
-                        "name": "X-Auth-Token",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -216,13 +202,6 @@ const docTemplate = `{
                 ],
                 "summary": "update biography of authenticated user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "JSON Web Token",
-                        "name": "X-Auth-Token",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "new biography",
                         "name": "Biography",

@@ -81,7 +81,7 @@ func Callback(state string, code string) (*string, error) {
 		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	}
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	jwtAccessToken, err := jwtToken.SignedString([]byte(config.Conf.Credentials.JWTToken))
+	jwtAccessToken, err := jwtToken.SignedString([]byte(config.Conf.Credentials.JWTSecret))
 	if err != nil {
 		return nil,
 			errors.New(

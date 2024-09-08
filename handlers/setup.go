@@ -63,7 +63,7 @@ func Setup() {
 
 	// Encrypt cookie
 	app.Use(encryptcookie.New(encryptcookie.Config{
-		Key: config.Conf.Credentials.JWTToken,
+		Key: config.Conf.Credentials.JWTSecret,
 	}))
 
 	// Run the web server

@@ -135,9 +135,6 @@ paths:
       responses:
         "200":
           description: OK
-          headers:
-            X-Auth-Token:
-              type: string
           schema:
             items:
               $ref: '#/definitions/structs.JWTResponse'
@@ -178,12 +175,6 @@ paths:
       consumes:
       - application/json
       description: retrieve information of authenticated user
-      parameters:
-      - description: JSON Web Token
-        in: header
-        name: X-Auth-Token
-        required: true
-        type: string
       responses:
         "200":
           description: OK
@@ -206,11 +197,6 @@ paths:
       - application/json
       description: update biography of authenticated user
       parameters:
-      - description: JSON Web Token
-        in: header
-        name: X-Auth-Token
-        required: true
-        type: string
       - description: new biography
         in: body
         name: Biography

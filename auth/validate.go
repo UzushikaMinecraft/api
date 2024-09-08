@@ -13,7 +13,7 @@ func Validate(tokenString string) (jwt.MapClaims, error) {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(config.Conf.Credentials.JWTToken), nil
+		return []byte(config.Conf.Credentials.JWTSecret), nil
 	})
 
 	if err != nil {
