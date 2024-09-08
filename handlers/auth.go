@@ -40,6 +40,14 @@ func HandleAuthCallback(c *fiber.Ctx) error {
 	)
 
 	if err == nil {
+		cookie := new(fiber.Cookie)
+		cookie.Name = "jwt"
+		cookie.Value = *jwtAccessToken
+		cookie.SameSite = "Strict"
+		cookie.Secure = true
+		cookie.HTTPOnly = true
+		c.Cookie(cookie)
+
 		c.Response().Header.Add("X-Auth-Token", *jwtAccessToken)
 		return c.JSON(
 			structs.JWTResponse{
