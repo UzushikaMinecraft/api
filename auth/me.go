@@ -9,9 +9,9 @@ import (
 // @Summary retrieve information of authenticated user
 // @Description retrieve information of authenticated user
 // @Tags login
-// @Accept  json
-// @Produce  json
-// @Param token query string true "JSON Web Token"
+// @Accept json
+// @Param X-Auth-Token header string true "JSON Web Token"
+// @Header 200 {string}
 // @Router /me [get]
 func GetMe(c *fiber.Ctx) error {
 	if c.Params("token") == "" {

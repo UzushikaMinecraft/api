@@ -23,7 +23,8 @@ import (
 // @Produce  json
 // @Param code query string true "Bearer token"
 // @Param state query string true "Random state for validating request"
-// @Success 200 {array} structs.DiscordUser
+// @Success 200 {array} structs.JWTResponse
+// @Header 200 {string} X-Auth-Token
 // @Failure 500 {object} structs.Error
 // @Router /login/callback [get]
 func Callback(c *fiber.Ctx) error {
@@ -113,9 +114,10 @@ func Callback(c *fiber.Ctx) error {
 		})
 	}
 
+	c.Response().Header.Add("X-Auth-Token", jwtAccessToken)
 	return c.Status(200).JSON(
 		structs.JWTResponse{
-			JwtToken: jwtAccessToken,
+			Success: true,
 		},
 	)
 }

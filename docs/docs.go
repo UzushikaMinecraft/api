@@ -145,7 +145,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/structs.DiscordUser"
+                                "$ref": "#/definitions/structs.JWTResponse"
+                            }
+                        },
+                        "headers": {
+                            "X-Auth-Token": {
+                                "type": "string"
                             }
                         }
                     },
@@ -377,55 +382,19 @@ const docTemplate = `{
                 }
             }
         },
-        "structs.DiscordUser": {
-            "type": "object",
-            "properties": {
-                "accent_color": {
-                    "type": "integer"
-                },
-                "avatar": {
-                    "type": "string"
-                },
-                "avatar_decoration_data": {},
-                "banner": {},
-                "banner_color": {
-                    "type": "string"
-                },
-                "clan": {},
-                "discriminator": {
-                    "type": "string"
-                },
-                "flags": {
-                    "type": "integer"
-                },
-                "global_name": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "locale": {
-                    "type": "string"
-                },
-                "mfa_enabled": {
-                    "type": "boolean"
-                },
-                "premium_type": {
-                    "type": "integer"
-                },
-                "public_flags": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "structs.Error": {
             "type": "object",
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "structs.JWTResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
                 }
             }
         },

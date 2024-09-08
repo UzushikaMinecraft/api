@@ -9,40 +9,15 @@ definitions:
       head:
         type: string
     type: object
-  structs.DiscordUser:
-    properties:
-      accent_color:
-        type: integer
-      avatar:
-        type: string
-      avatar_decoration_data: {}
-      banner: {}
-      banner_color:
-        type: string
-      clan: {}
-      discriminator:
-        type: string
-      flags:
-        type: integer
-      global_name:
-        type: string
-      id:
-        type: string
-      locale:
-        type: string
-      mfa_enabled:
-        type: boolean
-      premium_type:
-        type: integer
-      public_flags:
-        type: integer
-      username:
-        type: string
-    type: object
   structs.Error:
     properties:
       error:
         type: string
+    type: object
+  structs.JWTResponse:
+    properties:
+      success:
+        type: boolean
     type: object
   structs.Profile:
     properties:
@@ -176,9 +151,12 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            X-Auth-Token:
+              type: string
           schema:
             items:
-              $ref: '#/definitions/structs.DiscordUser'
+              $ref: '#/definitions/structs.JWTResponse'
             type: array
         "500":
           description: Internal Server Error

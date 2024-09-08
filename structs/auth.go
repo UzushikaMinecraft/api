@@ -1,7 +1,7 @@
 package structs
 
 type JWTResponse struct {
-	JwtToken string `json:"jwt_token"`
+	Success bool
 }
 
 type Me struct {
