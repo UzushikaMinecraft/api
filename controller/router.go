@@ -66,6 +66,12 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/login", auth.Login)
 	app.Get("/api/login/callback", auth.Callback)
 
+	// Personal information
+	app.Get("/api/me", auth.GetMe)
+
+	// Retrieve UUID from provided Discord ID
+	app.Get("/api/discord/:uuid", services.GetUUIDByDiscord)
+
 	// Swagger
 	app.Get("/api/swagger/*", swagger.HandlerDefault)
 }
