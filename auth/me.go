@@ -11,7 +11,8 @@ import (
 // @Tags login
 // @Accept json
 // @Param X-Auth-Token header string true "JSON Web Token"
-// @Header 200 {string}
+// @Success 200 {object} structs.Me
+// @Failure 400 {object} structs.Error
 // @Router /me [get]
 func GetMe(c *fiber.Ctx) error {
 	if c.Params("token") == "" {

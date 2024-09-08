@@ -169,9 +169,6 @@ const docTemplate = `{
                 "consumes": [
                     "application/json"
                 ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "login"
                 ],
@@ -180,12 +177,25 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "JSON Web Token",
-                        "name": "token",
-                        "in": "query",
+                        "name": "X-Auth-Token",
+                        "in": "header",
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Me"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
             }
         },
         "/profiles": {
@@ -351,10 +361,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/structs.Server"
-                            }
+                            "$ref": "#/definitions/structs.Server"
                         }
                     },
                     "500": {
@@ -395,6 +402,17 @@ const docTemplate = `{
             "properties": {
                 "success": {
                     "type": "boolean"
+                }
+            }
+        },
+        "structs.Me": {
+            "type": "object",
+            "properties": {
+                "session_expire_at": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },

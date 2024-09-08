@@ -33,7 +33,7 @@ func GetServers() []structs.ServerStatus {
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Name of target server"
-// @Success 200 {array} structs.Server
+// @Success 200 {object} structs.Server
 // @Failure 500 {object} structs.Error
 // @Router /servers/{name} [get]
 func GetServer(name string) (*structs.ServerStatus, error) {
