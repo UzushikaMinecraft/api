@@ -20,7 +20,7 @@ func HandleMe(c *fiber.Ctx) error {
 		c.Status(301).Redirect("/api/auth")
 	}
 
-	if cookie.JWT == "" || cookie == nil {
+	if cookie.JWT == "" {
 		c.Status(301).Redirect("/api/auth")
 	}
 
