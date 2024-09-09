@@ -47,6 +47,8 @@ func HandleAuthCallback(c *fiber.Ctx) error {
 		cookie.HTTPOnly = true
 		c.Cookie(cookie)
 
+		c.Status(301).Redirect("/?loggedIn=success")
+
 		return c.JSON(
 			structs.JWTResponse{
 				Success: true,
