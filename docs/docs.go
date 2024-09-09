@@ -85,7 +85,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "login"
+                    "auth"
                 ],
                 "summary": "callback endpoint for Discord login",
                 "parameters": [
@@ -112,6 +112,54 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/structs.JWTResponse"
                             }
+                        },
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/token/refresh": {
+            "get": {
+                "description": "refresh token with provided access token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "refresh token with provided access token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/structs.Error"
                         }
                     },
                     "500": {
@@ -452,11 +500,11 @@ const docTemplate = `{
         "structs.Me": {
             "type": "object",
             "properties": {
+                "profile": {
+                    "$ref": "#/definitions/structs.Profile"
+                },
                 "session_expire_at": {
                     "type": "integer"
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         },
