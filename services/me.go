@@ -18,8 +18,16 @@ func GetMe(token string) (*structs.Me, error) {
 		return nil, errors.New("invalid token")
 	}
 
+	var p structs.Profile
+	p.UUID = claims["user_id"].(string)
+
+	res := db.Core.First(&p)
+	if res.RowsAffected == 0 {
+		return nil, errors.New("no player found")
+	}
+
 	return &structs.Me{
-		UserId:          claims["user_id"].(string),
+		Profile:         p,
 		SessionExpireAt: claims["exp"].(int64),
 	}, nil
 }
@@ -39,14 +47,14 @@ func UpdateBiography(biography string, token string) (*structs.Me, error) {
 
 	res := db.Core.First(&p)
 	if res.RowsAffected == 0 {
-		return nil, errors.New("no player found")
+		return nil, errors.New("no players found")
 	}
 
 	p.Biography = biography
 	db.Core.Save(&p)
 
 	return &structs.Me{
-		UserId:          claims["user_id"].(string),
+		Profile:         p,
 		SessionExpireAt: claims["exp"].(int64),
 	}, nil
 }

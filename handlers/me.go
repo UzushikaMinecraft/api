@@ -40,6 +40,14 @@ func HandleMe(c *fiber.Ctx) error {
 		)
 	}
 
+	if err.Error() == "no player found" {
+		return c.Status(404).JSON(
+			structs.Error{
+				Error: err.Error(),
+			},
+		)
+	}
+
 	return c.Status(500).JSON(
 		structs.Error{
 			Error: err.Error(),

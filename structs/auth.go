@@ -5,6 +5,6 @@ type JWTResponse struct {
 }
 
 type Me struct {
-	UserId          string `json:"user_id"`
-	SessionExpireAt int64  `json:"session_expire_at"`
+	Profile         Profile
+	SessionExpireAt int64 `json:"session_expire_at"`
 }
