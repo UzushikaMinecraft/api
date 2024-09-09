@@ -33,12 +33,16 @@ func Init() error {
 		config.Conf.MySQL.DiscordSRV.Database,
 	)
 
-	Core, err = gorm.Open(mysql.Open(dsnCore), &gorm.Config{})
+	Core, err = gorm.Open(mysql.Open(dsnCore), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		return err
 	}
 
-	DiscordSRV, err = gorm.Open(mysql.Open(dsnDiscordSRV), &gorm.Config{})
+	DiscordSRV, err = gorm.Open(mysql.Open(dsnDiscordSRV), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		return err
 	}
