@@ -40,7 +40,7 @@ func HandleAuthCallback(c *fiber.Ctx) error {
 
 	if err == nil {
 		cookie := new(fiber.Cookie)
-		cookie.Name = "jwt"
+		cookie.Name = "accessToken"
 		cookie.Value = *jwtAccessToken
 		cookie.SameSite = "Strict"
 		cookie.Secure = true

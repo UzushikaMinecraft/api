@@ -20,11 +20,11 @@ func HandleMe(c *fiber.Ctx) error {
 		c.Status(301).Redirect("/api/auth")
 	}
 
-	if cookie.JWT == "" {
+	if cookie.AccessToken == "" {
 		c.Status(301).Redirect("/api/auth")
 	}
 
-	res, err := services.GetMe(cookie.JWT)
+	res, err := services.GetMe(cookie.AccessToken)
 
 	if err == nil {
 		return c.Status(200).JSON(
@@ -71,12 +71,12 @@ func HandleMeBiography(c *fiber.Ctx) error {
 		c.Status(301).Redirect("/api/auth")
 	}
 
-	if cookie.JWT == "" || cookie == nil {
+	if cookie.AccessToken == "" || cookie == nil {
 		c.Status(301).Redirect("/api/auth")
 	}
 
 	res, err := services.UpdateBiography(
-		cookie.JWT, b.Biography,
+		cookie.AccessToken, b.Biography,
 	)
 
 	if err == nil {
