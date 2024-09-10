@@ -14,7 +14,7 @@ import (
 	"github.com/uzushikaminecraft/api/structs"
 )
 
-func Callback(state string, code string) (*string, error) {
+func Callback(state string, code string) (*structs.JWTCallback, error) {
 	// read `state` parameter to validate OAuth request
 	if state != config.Conf.Credentials.State {
 		return nil, errors.New(
@@ -94,5 +94,10 @@ func Callback(state string, code string) (*string, error) {
 			)
 	}
 
-	return &jwtAccessToken, nil
+	var jwtCallback = &structs.JWTCallback{
+		Claims:      claims,
+		AccessToken: jwtAccessToken,
+	}
+
+	return jwtCallback, nil
 }

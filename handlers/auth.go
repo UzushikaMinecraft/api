@@ -41,17 +41,18 @@ func HandleAuth(c *fiber.Ctx) error {
 // @Failure 500 {object} structs.Error
 // @Router /auth/callback [get]
 func HandleAuthCallback(c *fiber.Ctx) error {
-	jwtAccessToken, err := auth.Callback(
+	jwtCallback, err := auth.Callback(
 		c.Query("state"), c.Query("code"),
 	)
 
 	if err == nil {
 		cookie := new(fiber.Cookie)
 		cookie.Name = "accessToken"
-		cookie.Value = *jwtAccessToken
+		cookie.Value = jwtCallback.AccessToken
 		cookie.SameSite = "Strict"
 		cookie.Secure = true
 		cookie.HTTPOnly = true
+		cookie.Expires = jwtCallback.Claims["exp"].(time.Time)
 		c.Cookie(cookie)
 
 		c.Status(301).Redirect("/?loggedIn=success")
