@@ -53,6 +53,7 @@ func HandleAuthCallback(c *fiber.Ctx) error {
 		cookie.Secure = true
 		cookie.HTTPOnly = true
 		cookie.Expires = jwtCallback.Claims["exp"].(time.Time)
+		cookie.MaxAge = int(jwtCallback.Claims["exp"].(time.Time).Sub(time.Now()).Seconds())
 		c.Cookie(cookie)
 
 		c.Status(301).Redirect("/?loggedIn=success")
