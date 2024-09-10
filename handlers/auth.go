@@ -138,6 +138,7 @@ func HandleAuthTokenRefresh(c *fiber.Ctx) error {
 	newCookie.SameSite = "Strict"
 	newCookie.Secure = true
 	newCookie.HTTPOnly = true
+	newCookie.Expires = claims["exp"].(time.Time)
 	c.Cookie(newCookie)
 
 	c.Status(301).Redirect("/?loggedIn=success")
