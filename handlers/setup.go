@@ -67,5 +67,5 @@ func Setup() {
 	}))
 
 	// Run the web server
-	log.Fatal(app.Listen(":4000"))
+	log.Fatal(app.Listen(":3200"))
 }
