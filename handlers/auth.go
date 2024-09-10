@@ -49,6 +49,7 @@ func HandleAuthCallback(c *fiber.Ctx) error {
 		cookie := new(fiber.Cookie)
 		cookie.Name = "accessToken"
 		cookie.Value = jwtCallback.AccessToken
+		cookie.Path = "/"
 		cookie.SameSite = "Strict"
 		cookie.Secure = true
 		cookie.HTTPOnly = true
@@ -138,10 +139,12 @@ func HandleAuthTokenRefresh(c *fiber.Ctx) error {
 	newCookie := new(fiber.Cookie)
 	newCookie.Name = "accessToken"
 	newCookie.Value = newTokenString
+	newCookie.Path = "/"
 	newCookie.SameSite = "Strict"
 	newCookie.Secure = true
 	newCookie.HTTPOnly = true
 	newCookie.Expires = claims["exp"].(time.Time)
+	newCookie.MaxAge = int(claims["exp"].(time.Time).Sub(time.Now()).Seconds())
 	c.Cookie(newCookie)
 
 	c.Status(301).Redirect("/?loggedIn=success")
