@@ -121,6 +121,8 @@ func HandleAuthTokenRefresh(c *fiber.Ctx) error {
 		)
 	}
 
+	c.ClearCookie("accessToken")
+
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	newTokenString, err := newToken.SignedString([]byte(config.Conf.Credentials.JWTSecret))
